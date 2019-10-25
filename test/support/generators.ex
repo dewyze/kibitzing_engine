@@ -2,6 +2,7 @@ defmodule Support.Generators do
   use ExUnitProperties
 
   alias Kibitzing.Engine.Convention.Bid.{Level, Strain}
+  alias Kibitzing.Engine.Convention.Table
 
   @spec n_bid() :: no_return
   def n_bid, do: bid(seats: [:N])
@@ -36,6 +37,14 @@ defmodule Support.Generators do
   def pass do
     gen all(seat <- member_of([:N, :E, :S, :W])) do
       {1, :pass, seat}
+    end
+  end
+
+  @spec bid_with_table() :: no_return
+  @spec bid_with_table(keyword()) :: no_return
+  def bid_with_table(options \\ Keyword.new()) do
+    gen all(bid <- bid(options)) do
+      %Table{bid: bid}
     end
   end
 end

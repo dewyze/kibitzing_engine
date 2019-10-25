@@ -13,6 +13,7 @@ defmodule Support.Generators do
   @spec w_bid() :: no_return
   def w_bid, do: bid(seats: [:S])
 
+  # TODO: Should generate passes as well
   @spec bid() :: no_return
   @spec bid(keyword()) :: no_return
   def bid(options \\ Keyword.new()) do
@@ -36,15 +37,17 @@ defmodule Support.Generators do
   @spec pass :: no_return
   def pass do
     gen all(seat <- member_of([:N, :E, :S, :W])) do
-      {1, :pass, seat}
+      {:pass, seat}
     end
   end
 
   @spec bid_with_table() :: no_return
   @spec bid_with_table(keyword()) :: no_return
   def bid_with_table(options \\ Keyword.new()) do
+    previous_bids = Keyword.get(options, :previous_bids, [])
+
     gen all(bid <- bid(options)) do
-      %Table{bid: bid}
+      %Table{bid: bid, previous_bids: previous_bids}
     end
   end
 end

@@ -1,9 +1,9 @@
-defmodule Kibitzing.Engine.Convention.Bid.StrainTest do
+defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
   use ExUnit.Case
   use ExUnitProperties
   alias Support.Generators, as: Gen
-  # doctest Kibitzing.Engine.Convention.Bid.Strain
-  alias Kibitzing.Engine.Convention.Bid.Strain
+  # doctest Kibitzing.Engine.Convention.Requirement.Strain
+  alias Kibitzing.Engine.Convention.Requirement.Strain
   alias Kibitzing.Engine.Convention.Table
 
   describe "strains" do

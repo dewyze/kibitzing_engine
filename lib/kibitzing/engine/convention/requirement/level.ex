@@ -1,4 +1,4 @@
-defmodule Kibitzing.Engine.Convention.Bid.Level do
+defmodule Kibitzing.Engine.Convention.Requirement.Level do
   alias Kibitzing.Engine.Convention.Table
 
   @levels [:one, :two, :three, :four, :five, :six, :seven]

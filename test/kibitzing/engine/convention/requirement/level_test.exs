@@ -1,8 +1,8 @@
-defmodule Kibitzing.Engine.Convention.Bid.LevelTest do
+defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
   use ExUnit.Case
   use ExUnitProperties
-  # doctest Kibitzing.Engine.Convention.Bid.Level
-  alias Kibitzing.Engine.Convention.Bid.Level
+  # doctest Kibitzing.Engine.Convention.Requirement.Level
+  alias Kibitzing.Engine.Convention.Requirement.Level
   alias Kibitzing.Engine.Convention.Table
   alias Support.Generators, as: Gen
 

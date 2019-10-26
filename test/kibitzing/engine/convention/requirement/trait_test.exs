@@ -1,9 +1,9 @@
-defmodule Kibitzing.Engine.Convention.Bid.TraitTest do
+defmodule Kibitzing.Engine.Convention.Requirement.TraitTest do
   use ExUnit.Case
   use ExUnitProperties
   alias Support.Generators, as: Gen
-  # doctest Kibitzing.Engine.Convention.Bid.Trait
-  alias Kibitzing.Engine.Convention.Bid.Trait
+  # doctest Kibitzing.Engine.Convention.Requirement.Trait
+  alias Kibitzing.Engine.Convention.Requirement.Trait
 
   describe "opening_bid" do
     test "with no args returns the same as with args" do

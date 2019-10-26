@@ -1,7 +1,7 @@
 defmodule Support.Generators do
   use ExUnitProperties
 
-  alias Kibitzing.Engine.Convention.Bid.{Level, Strain}
+  alias Kibitzing.Engine.Convention.Requirement.{Level, Strain}
   alias Kibitzing.Engine.Convention.Table
 
   @spec n_bid() :: no_return

@@ -1,4 +1,4 @@
-defmodule Kibitzing.Engine.Convention.Bid.Strain do
+defmodule Kibitzing.Engine.Convention.Requirement.Strain do
   alias Kibitzing.Engine.Convention.Table
 
   @majors [:spades, :hearts]

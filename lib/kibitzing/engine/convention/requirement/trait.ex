@@ -1,4 +1,4 @@
-defmodule Kibitzing.Engine.Convention.Bid.Trait do
+defmodule Kibitzing.Engine.Convention.Requirement.Trait do
   alias Kibitzing.Engine.Convention.Table
 
   def opening_bid, do: &opening_bid/1

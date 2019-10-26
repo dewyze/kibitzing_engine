@@ -17,9 +17,9 @@ defmodule Support.Generators do
   @spec bid() :: no_return
   @spec bid(keyword()) :: no_return
   def bid(options \\ Keyword.new()) do
-    only_levels = Keyword.get(options, :only_levels, Level.levels())
+    only_levels = Keyword.get(options, :only_levels, Level.levels() ++ [:pass])
     ignore_levels = Keyword.get(options, :ignore_levels, [])
-    only_strains = Keyword.get(options, :only_strains, Strain.strains())
+    only_strains = Keyword.get(options, :only_strains, Strain.strains() ++ [:pass])
     ignore_strains = Keyword.get(options, :ignore_strains, [])
     seats = Keyword.get(options, :seats, [:N, :E, :S, :W])
     levels = only_levels -- ignore_levels
@@ -30,7 +30,13 @@ defmodule Support.Generators do
           strain <- member_of(strains),
           seat <- member_of(seats)
         ) do
-      {level, strain, seat}
+      case {level, strain} do
+        {:pass, :pass} ->
+          {:pass, seat}
+
+        _ ->
+          {level, strain, seat}
+      end
     end
   end
 

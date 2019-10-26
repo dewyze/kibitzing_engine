@@ -35,10 +35,13 @@ defmodule Kibitzing.Engine.Convention.Bid.Strain do
 
   def major, do: &major/1
   def major(%Table{bid: {_, strain, _}}), do: Enum.member?(@majors, strain)
+  def major(_), do: false
 
   def minor, do: &minor/1
   def minor(%Table{bid: {_, strain, _}}), do: Enum.member?(@minors, strain)
+  def minor(_), do: false
 
   def suit, do: &suit/1
   def suit(%Table{bid: {_, strain, _}}), do: Enum.member?(@suits, strain)
+  def suit(_), do: false
 end

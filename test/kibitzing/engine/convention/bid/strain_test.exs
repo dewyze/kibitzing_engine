@@ -4,7 +4,6 @@ defmodule Kibitzing.Engine.Convention.Bid.StrainTest do
   alias Support.Generators, as: Gen
   # doctest Kibitzing.Engine.Convention.Bid.Strain
   alias Kibitzing.Engine.Convention.Bid.Strain
-  alias Kibitzing.Engine.Convention.Table
 
   describe "strains" do
     test "returns all possible strains" do

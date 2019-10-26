@@ -4,7 +4,6 @@ defmodule Kibitzing.Engine.Convention.Bid.TraitTest do
   alias Support.Generators, as: Gen
   # doctest Kibitzing.Engine.Convention.Bid.Trait
   alias Kibitzing.Engine.Convention.Bid.Trait
-  alias Kibitzing.Engine.Convention.Table
 
   describe "opening_bid" do
     test "with no args returns the same as with args" do

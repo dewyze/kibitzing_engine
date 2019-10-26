@@ -6,13 +6,11 @@ defmodule Kibitzing.Engine.ConventionTest do
 
   describe "new" do
     test "creates a convention" do
-      convention = Convention.new(:two_over_one, "Two Over One", "2/1 Opening")
+      convention = Convention.new(:two_over_one, "2/1", "2/1 Opening")
 
-      assert match?(convention, %Convention{
-               id: :two_over_one,
-               name: "Two Over One",
-               description: "2/1 Opening"
-             })
+      assert convention.id == :two_over_one
+      assert convention.name == "2/1"
+      assert convention.description == "2/1 Opening"
     end
   end
 end

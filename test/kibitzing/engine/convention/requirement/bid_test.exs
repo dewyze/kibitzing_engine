@@ -25,4 +25,24 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
       end
     end
   end
+
+  describe "double" do
+    test "with no args returns the same as with args" do
+      check all(table <- Gen.bid_with_table()) do
+        assert Bid.double().(table) == Bid.double(table)
+      end
+    end
+
+    test "returns true if the bid is a double" do
+      check all(table <- Gen.bid_with_table(only_levels: [:double], only_strains: [:double])) do
+        assert Bid.double(table)
+      end
+    end
+
+    test "returns false if the bid is not a double" do
+      check all(table <- Gen.bid_with_table(ignore_levels: [:double], ignore_strains: [:double])) do
+        refute Bid.double(table)
+      end
+    end
+  end
 end

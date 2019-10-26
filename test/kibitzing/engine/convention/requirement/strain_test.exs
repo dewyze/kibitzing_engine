@@ -172,13 +172,15 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns a function that asserts if a bid is a suit" do
-      check all(table <- Gen.bid_with_table(ignore_strains: [:pass, :no_trump])) do
+      check all(
+              table <- Gen.bid_with_table(ignore_strains: [:double, :redouble, :pass, :no_trump])
+            ) do
         assert Strain.suit(table)
       end
     end
 
     test "returns a function that fails if a bid is not a suit" do
-      check all(table <- Gen.bid_with_table(only_strains: [:pass, :no_trump])) do
+      check all(table <- Gen.bid_with_table(only_strains: [:double, :redouble, :pass, :no_trump])) do
         refute Strain.suit(table)
       end
     end

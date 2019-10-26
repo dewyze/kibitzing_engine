@@ -46,7 +46,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.Strain do
   def suit(_), do: false
 
   def new_strain, do: &new_strain/1
-  def new_strain(%Table{bid: {:pass, _}}), do: false
+  def new_strain(%Table{bid: {_, _}}), do: false
 
   def new_strain(%Table{previous_bids: previous_bids, bid: {_, strain, _}}) do
     Enum.all?(previous_bids, fn bid ->

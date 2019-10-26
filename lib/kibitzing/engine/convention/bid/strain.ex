@@ -44,4 +44,17 @@ defmodule Kibitzing.Engine.Convention.Bid.Strain do
   def suit, do: &suit/1
   def suit(%Table{bid: {_, strain, _}}), do: Enum.member?(@suits, strain)
   def suit(_), do: false
+
+  def new_strain, do: &new_strain/1
+  def new_strain(%Table{bid: {:pass, _}}), do: false
+
+  def new_strain(%Table{previous_bids: previous_bids, bid: {_, strain, _}}) do
+    Enum.all?(previous_bids, fn bid ->
+      with {_, prev_strain, _} <- bid do
+        strain != prev_strain
+      else
+        _ -> true
+      end
+    end)
+  end
 end

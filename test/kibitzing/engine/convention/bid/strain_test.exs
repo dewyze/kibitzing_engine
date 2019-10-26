@@ -4,6 +4,7 @@ defmodule Kibitzing.Engine.Convention.Bid.StrainTest do
   alias Support.Generators, as: Gen
   # doctest Kibitzing.Engine.Convention.Bid.Strain
   alias Kibitzing.Engine.Convention.Bid.Strain
+  alias Kibitzing.Engine.Convention.Table
 
   describe "strains" do
     test "returns all possible strains" do
@@ -179,6 +180,34 @@ defmodule Kibitzing.Engine.Convention.Bid.StrainTest do
     test "returns a function that fails if a bid is not a suit" do
       check all(table <- Gen.bid_with_table(only_strains: [:pass, :no_trump])) do
         refute Strain.suit(table)
+      end
+    end
+  end
+
+  describe "new_strain" do
+    test "with no args returns the same as with args" do
+      check all(table <- Gen.bid_with_table()) do
+        assert Strain.new_strain().(table) == Strain.new_strain(table)
+      end
+    end
+
+    test "returns a function that asserts if a bid has an unmentioned strain" do
+      check all(
+              {_, strain, _} = bid <- Gen.bid(),
+              bids <- list_of(Gen.bid(ignore_strains: [strain]))
+            ) do
+        table = %Table{previous_bids: bids, bid: bid}
+        assert Strain.new_strain(table)
+      end
+    end
+
+    test "returns a function that fails if a bid has a mentioned strain" do
+      check all(
+              {_, strain, _} = bid <- Gen.bid(),
+              bids <- list_of(Gen.bid())
+            ) do
+        table = %Table{previous_bids: bids ++ [{:five, strain, :N}], bid: bid}
+        refute Strain.new_strain(table)
       end
     end
   end

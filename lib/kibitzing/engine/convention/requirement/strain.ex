@@ -1,10 +1,10 @@
 defmodule Kibitzing.Engine.Convention.Requirement.Strain do
   alias Kibitzing.Engine.Convention.Table
 
-  @majors [:spades, :hearts]
-  @minors [:diamonds, :clubs]
-  @suits @majors ++ @minors
-  @strains [:no_trump] ++ @suits
+  @majors [:hearts, :spades]
+  @minors [:clubs, :diamonds]
+  @suits @minors ++ @majors
+  @strains @suits ++ [:no_trump]
 
   def strains do
     @strains

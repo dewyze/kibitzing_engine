@@ -8,19 +8,19 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
 
   describe "strains" do
     test "returns all possible strains" do
-      assert Strain.strains() == [:no_trump, :spades, :hearts, :diamonds, :clubs]
+      assert Strain.strains() == [:clubs, :diamonds, :hearts, :spades, :no_trump]
     end
   end
 
   describe "majors" do
     test "returns all possible strains" do
-      assert Strain.majors() == [:spades, :hearts]
+      assert Strain.majors() == [:hearts, :spades]
     end
   end
 
   describe "minors" do
     test "returns all possible strains" do
-      assert Strain.minors() == [:diamonds, :clubs]
+      assert Strain.minors() == [:clubs, :diamonds]
     end
   end
 

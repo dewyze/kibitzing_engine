@@ -75,10 +75,10 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
     end
   end
 
-  describe "previous_partner" do
+  describe "from_prev_partner" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table(prev: list_of(Gen.contract_bid(), min_length: 2))) do
-        assert Bid.previous_partner().(table) == Bid.previous_partner(table)
+        assert Bid.from_prev_partner().(table) == Bid.from_prev_partner(table)
       end
     end
 
@@ -90,14 +90,14 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
               bid <- Gen.contract_bid(),
               table = %Table{bid: bid, previous_bids: [opponent_bid, partner_bid] ++ bids}
             ) do
-        assert Bid.previous_partner(table) == partner_bid
+        assert Bid.from_prev_partner(table) == partner_bid
       end
     end
 
     test "raises an error if partner has not bid" do
       check all(table <- Gen.table(prev: list_of(Gen.contract_bid(), max_length: 1))) do
         assert_raise(UnreachableError, fn ->
-          Bid.previous_partner(table)
+          Bid.from_prev_partner(table)
         end)
       end
     end

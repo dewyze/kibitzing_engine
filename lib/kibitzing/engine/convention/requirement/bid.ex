@@ -11,11 +11,11 @@ defmodule Kibitzing.Engine.Convention.Requirement.Bid do
   def redouble(), do: &redouble/1
   def redouble(%Table{bid: bid}), do: match?({:redouble, _}, bid)
 
-  def previous_partner(), do: &previous_partner/1
+  def from_prev_partner(), do: &from_prev_partner/1
 
-  def previous_partner(%Table{previous_bids: bids}) when length(bids) >= 2 do
+  def from_prev_partner(%Table{previous_bids: bids}) when length(bids) >= 2 do
     Enum.at(bids, 1)
   end
 
-  def previous_partner(_), do: raise(UnreachableError)
+  def from_prev_partner(_), do: raise(UnreachableError)
 end

@@ -45,4 +45,26 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
       end
     end
   end
+
+  describe "redouble" do
+    test "with no args returns the same as with args" do
+      check all(table <- Gen.bid_with_table()) do
+        assert Bid.redouble().(table) == Bid.redouble(table)
+      end
+    end
+
+    test "returns true if the bid is a redouble" do
+      check all(table <- Gen.bid_with_table(only_levels: [:redouble], only_strains: [:redouble])) do
+        assert Bid.redouble(table)
+      end
+    end
+
+    test "returns false if the bid is not a redouble" do
+      check all(
+              table <- Gen.bid_with_table(ignore_levels: [:redouble], ignore_strains: [:redouble])
+            ) do
+        refute Bid.redouble(table)
+      end
+    end
+  end
 end

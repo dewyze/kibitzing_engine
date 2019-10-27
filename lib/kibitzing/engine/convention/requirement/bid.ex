@@ -6,4 +6,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.Bid do
 
   def double(), do: &double/1
   def double(%Table{bid: bid}), do: match?({:double, _}, bid)
+
+  def redouble(), do: &redouble/1
+  def redouble(%Table{bid: bid}), do: match?({:redouble, _}, bid)
 end

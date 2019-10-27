@@ -2,7 +2,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
   use ExUnit.Case
   use ExUnitProperties
   # doctest Kibitzing.Engine.Convention.Requirement.Bid
-  alias Kibitzing.Engine.Convention.Requirement.{Bid, UnreachableError}
+  alias Kibitzing.Engine.Convention.Requirement.Bid
   alias Kibitzing.Engine.Convention.Table
   alias Support.Generators, as: Gen
 
@@ -90,15 +90,13 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
               bid <- Gen.contract_bid(),
               table = %Table{bid: bid, previous_bids: [opponent_bid, partner_bid] ++ bids}
             ) do
-        assert Bid.from_prev_partner(table) == partner_bid
+        assert Bid.from_prev_partner(table) == {:ok, partner_bid}
       end
     end
 
     test "raises an error if partner has not bid" do
       check all(table <- Gen.table(prev: list_of(Gen.contract_bid(), max_length: 1))) do
-        assert_raise(UnreachableError, fn ->
-          Bid.from_prev_partner(table)
-        end)
+        assert Bid.from_prev_partner(table) == {:error, :no_previous_bid}
       end
     end
   end

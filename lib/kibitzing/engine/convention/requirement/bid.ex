@@ -14,8 +14,8 @@ defmodule Kibitzing.Engine.Convention.Requirement.Bid do
   def from_prev_partner(), do: &from_prev_partner/1
 
   def from_prev_partner(%Table{previous_bids: bids}) when length(bids) >= 2 do
-    Enum.at(bids, 1)
+    {:ok, Enum.at(bids, 1)}
   end
 
-  def from_prev_partner(_), do: raise(UnreachableError)
+  def from_prev_partner(_), do: {:error, :no_previous_bid}
 end

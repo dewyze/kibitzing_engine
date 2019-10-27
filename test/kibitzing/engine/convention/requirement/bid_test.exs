@@ -2,7 +2,8 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
   use ExUnit.Case
   use ExUnitProperties
   # doctest Kibitzing.Engine.Convention.Requirement.Bid
-  alias Kibitzing.Engine.Convention.Requirement.Bid
+  alias Kibitzing.Engine.Convention.Requirement.{Bid, UnreachableError}
+  alias Kibitzing.Engine.Convention.Table
   alias Support.Generators, as: Gen
 
   describe "pass" do
@@ -70,6 +71,34 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
                 Gen.table(bid: Gen.bid(ignore: [:redouble], ignore: [:redouble]))
             ) do
         refute Bid.redouble(table)
+      end
+    end
+  end
+
+  describe "previous_partner" do
+    test "with no args returns the same as with args" do
+      check all(table <- Gen.table(prev: list_of(Gen.contract_bid(), min_length: 2))) do
+        assert Bid.previous_partner().(table) == Bid.previous_partner(table)
+      end
+    end
+
+    test "returns the previous partner bid if one exists" do
+      check all(
+              partner_bid <- Gen.bid(),
+              opponent_bid <- Gen.bid(),
+              bids <- list_of(Gen.bid()),
+              bid <- Gen.contract_bid(),
+              table = %Table{bid: bid, previous_bids: [opponent_bid, partner_bid] ++ bids}
+            ) do
+        assert Bid.previous_partner(table) == partner_bid
+      end
+    end
+
+    test "raises an error if partner has not bid" do
+      check all(table <- Gen.table(prev: list_of(Gen.contract_bid(), max_length: 1))) do
+        assert_raise(UnreachableError, fn ->
+          Bid.previous_partner(table)
+        end)
       end
     end
   end

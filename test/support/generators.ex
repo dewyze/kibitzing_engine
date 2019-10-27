@@ -93,4 +93,16 @@ defmodule Support.Generators do
       %Table{bid: bid, previous_bids: previous_bids}
     end
   end
+
+  @spec table() :: no_return
+  @spec table(keyword()) :: no_return
+  def table(options \\ Keyword.new()) do
+    bid_gen = Keyword.get(options, :bid, bid())
+    prev_gen = Keyword.get(options, :prev, list_of(bid()))
+    next_gen = Keyword.get(options, :next, list_of(bid(), max_length: 35))
+
+    gen all(bid <- bid_gen, prev <- prev_gen, next <- next_gen) do
+      %Table{bid: bid, previous_bids: prev, next_bids: next}
+    end
+  end
 end

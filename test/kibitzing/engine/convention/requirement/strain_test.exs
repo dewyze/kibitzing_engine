@@ -199,7 +199,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
 
     test "returns a function that asserts if a bid has an unmentioned strain" do
       check all(
-              {_, strain, _} = bid <- Gen.bid(),
+              {_, strain, _} = bid <- Gen.contract_bid(),
               bids <- list_of(Gen.bid(ignore: [strain]))
             ) do
         table = %Table{previous_bids: bids, bid: bid}
@@ -209,7 +209,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
 
     test "returns a function that fails if a bid has a mentioned strain" do
       check all(
-              {_, strain, _} = bid <- Gen.bid(),
+              {_, strain, _} = bid <- Gen.contract_bid(),
               bids <- list_of(Gen.bid())
             ) do
         table = %Table{previous_bids: bids ++ [{:five, strain, :N}], bid: bid}

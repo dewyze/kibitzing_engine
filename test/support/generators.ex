@@ -1,7 +1,7 @@
 defmodule Support.Generators do
   use ExUnitProperties
 
-  alias Kibitzing.Engine.Convention.Requirement.{Level, Strain}
+  alias Kibitzing.Engine.Convention.Requirement.{Level, Strain, UnreachableError}
   alias Kibitzing.Engine.Convention.Table
 
   @spec n_bid() :: no_return
@@ -14,52 +14,82 @@ defmodule Support.Generators do
   def w_bid, do: bid(seats: [:S])
 
   # TODO: Should generate passes as well
-  @spec bid() :: no_return
-  @spec bid(keyword()) :: no_return
-  def bid(options \\ Keyword.new()) do
-    other_bids = [:pass, :double, :redouble]
-    only_levels = Keyword.get(options, :only_levels, Level.levels() ++ other_bids)
-    ignore_levels = Keyword.get(options, :ignore_levels, [])
-    only_strains = Keyword.get(options, :only_strains, Strain.strains() ++ other_bids)
-    ignore_strains = Keyword.get(options, :ignore_strains, [])
+  @spec contract_bid() :: no_return
+  @spec contract_bid(keyword()) :: no_return
+  def contract_bid(options \\ Keyword.new()) do
+    all_levels = Level.levels()
+    all_strains = Strain.strains()
+
+    only = Keyword.get(options, :only, [])
+    ignore = Keyword.get(options, :ignore, [])
+
+    only_levels = Enum.filter(only, &Enum.member?(all_levels, &1))
+    only_strains = Enum.filter(only, &Enum.member?(all_strains, &1))
+
+    ignore_levels = Enum.filter(ignore, &Enum.member?(all_levels, &1))
+    ignore_strains = Enum.filter(ignore, &Enum.member?(all_strains, &1))
+
+    levels =
+      case only_levels do
+        [] -> all_levels -- ignore_levels
+        _ -> only_levels
+      end
+
+    strains =
+      case only_strains do
+        [] -> all_strains -- ignore_strains
+        _ -> only_strains
+      end
+
     seats = Keyword.get(options, :seats, [:N, :E, :S, :W])
-    levels = only_levels -- ignore_levels
-    strains = only_strains -- ignore_strains
 
     gen all(
           level <- member_of(levels),
           strain <- member_of(strains),
           seat <- member_of(seats)
         ) do
-      case {level, strain} do
-        {:pass, :pass} ->
-          {:pass, seat}
-
-        {:double, :double} ->
-          {:double, seat}
-
-        {:redouble, :redouble} ->
-          {:redouble, seat}
-
-        _ ->
-          {level, strain, seat}
-      end
+      {level, strain, seat}
     end
   end
 
   @spec action_bid() :: no_return
   @spec action_bid(keyword()) :: no_return
   def action_bid(options \\ Keyword.new()) do
-    only_actions = Keyword.get(options, :only, [:pass, :double, :redouble])
-    ignore_actions = Keyword.get(options, :ignore, [])
+    all_actions = [:pass, :double, :redouble]
+
+    only = Keyword.get(options, :only, [])
+    ignore = Keyword.get(options, :ignore, [])
+
+    only_actions = Enum.filter(only, &Enum.member?(all_actions, &1))
+    ignore_actions = Enum.filter(ignore, &Enum.member?(all_actions, &1))
+
+    actions =
+      case only_actions do
+        [] -> all_actions -- ignore_actions
+        _ -> only_actions
+      end
+
     seats = Keyword.get(options, :seats, [:N, :E, :S, :W])
-    actions = only_actions -- ignore_actions
+
+    if Enum.empty?(actions) do
+      raise UnreachableError,
+        message:
+          "No possible actions are available, consider using &Support.Generators.contract_bid/1 instead"
+    end
 
     gen all(
           action <- member_of(actions),
           seat <- member_of(seats)
         ) do
       {action, seat}
+    end
+  end
+
+  @spec bid() :: no_return
+  @spec bid(keyword()) :: no_return
+  def bid(options \\ Keyword.new()) do
+    gen all(bid <- one_of([contract_bid(options), action_bid(options)])) do
+      bid
     end
   end
 

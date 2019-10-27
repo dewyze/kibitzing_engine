@@ -32,13 +32,13 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns a function that asserts if a bid is no trump" do
-      check all(table <- Gen.table(bid: Gen.bid(only_strains: [:no_trump]))) do
+      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:no_trump]))) do
         assert Strain.no_trump(table)
       end
     end
 
     test "returns a function that fails if a bid is not no trump" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore_strains: [:no_trump]))) do
+      check all(table <- Gen.table(bid: Gen.bid(ignore: [:no_trump]))) do
         refute Strain.no_trump(table)
       end
     end
@@ -52,13 +52,13 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns a function that asserts if a bid is spades trump" do
-      check all(table <- Gen.table(bid: Gen.bid(only_strains: [:spades]))) do
+      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:spades]))) do
         assert Strain.spades(table)
       end
     end
 
     test "returns a function that fails if a bid is not spades" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore_strains: [:spades]))) do
+      check all(table <- Gen.table(bid: Gen.bid(ignore: [:spades]))) do
         refute Strain.spades(table)
       end
     end
@@ -72,13 +72,13 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns a function that asserts if a bid is hearts trump" do
-      check all(table <- Gen.table(bid: Gen.bid(only_strains: [:hearts]))) do
+      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:hearts]))) do
         assert Strain.hearts(table)
       end
     end
 
     test "returns a function that fails if a bid is not hearts" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore_strains: [:hearts]))) do
+      check all(table <- Gen.table(bid: Gen.bid(ignore: [:hearts]))) do
         refute Strain.hearts(table)
       end
     end
@@ -92,13 +92,13 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns a function that asserts if a bid is diamonds trump" do
-      check all(table <- Gen.table(bid: Gen.bid(only_strains: [:diamonds]))) do
+      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:diamonds]))) do
         assert Strain.diamonds(table)
       end
     end
 
     test "returns a function that fails if a bid is not diamonds" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore_strains: [:diamonds]))) do
+      check all(table <- Gen.table(bid: Gen.bid(ignore: [:diamonds]))) do
         refute Strain.diamonds(table)
       end
     end
@@ -112,13 +112,13 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns a function that asserts if a bid is clubs trump" do
-      check all(table <- Gen.table(bid: Gen.bid(only_strains: [:clubs]))) do
+      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:clubs]))) do
         assert Strain.clubs(table)
       end
     end
 
     test "returns a function that fails if a bid is not clubs" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore_strains: [:clubs]))) do
+      check all(table <- Gen.table(bid: Gen.bid(ignore: [:clubs]))) do
         refute Strain.clubs(table)
       end
     end
@@ -132,13 +132,13 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns a function that asserts if a bid is a major" do
-      check all(table <- Gen.table(bid: Gen.bid(only_strains: Strain.majors()))) do
+      check all(table <- Gen.table(bid: Gen.contract_bid(only: Strain.majors()))) do
         assert Strain.major(table)
       end
     end
 
     test "returns a function that fails if a bid is not a major" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore_strains: Strain.majors()))) do
+      check all(table <- Gen.table(bid: Gen.bid(ignore: Strain.majors()))) do
         refute Strain.major(table)
       end
     end
@@ -152,13 +152,13 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns a function that asserts if a bid is a minor" do
-      check all(table <- Gen.table(bid: Gen.bid(only_strains: Strain.minors()))) do
+      check all(table <- Gen.table(bid: Gen.contract_bid(only: Strain.minors()))) do
         assert Strain.minor(table)
       end
     end
 
     test "returns a function that fails if a bid is not a minor" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore_strains: Strain.minors()))) do
+      check all(table <- Gen.table(bid: Gen.bid(ignore: Strain.minors()))) do
         refute Strain.minor(table)
       end
     end
@@ -171,10 +171,10 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
       end
     end
 
-    test "returns a function that asserts if a bid is a suit" do
+    test "returns a function that asserts if a contract bid is a suit" do
       check all(
               table <-
-                Gen.table(bid: Gen.bid(ignore_strains: [:double, :redouble, :pass, :no_trump]))
+                Gen.table(bid: Gen.contract_bid(ignore: [:no_trump]))
             ) do
         assert Strain.suit(table)
       end
@@ -183,7 +183,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     test "returns a function that fails if a bid is not a suit" do
       check all(
               table <-
-                Gen.table(bid: Gen.bid(only_strains: [:double, :redouble, :pass, :no_trump]))
+                Gen.table(bid: Gen.bid(only: [:double, :redouble, :pass, :no_trump]))
             ) do
         refute Strain.suit(table)
       end
@@ -200,7 +200,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     test "returns a function that asserts if a bid has an unmentioned strain" do
       check all(
               {_, strain, _} = bid <- Gen.bid(),
-              bids <- list_of(Gen.bid(ignore_strains: [strain]))
+              bids <- list_of(Gen.bid(ignore: [strain]))
             ) do
         table = %Table{previous_bids: bids, bid: bid}
         assert Strain.new_strain(table)

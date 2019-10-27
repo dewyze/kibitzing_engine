@@ -23,7 +23,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.TraitTest do
       check all(
               table <-
                 Gen.table(
-                  bid: Gen.bid(ignore_strains: [:pass, :double, :redouble]),
+                  bid: Gen.contract_bid(),
                   prev: list_of(Gen.pass())
                 )
             ) do
@@ -32,7 +32,13 @@ defmodule Kibitzing.Engine.Convention.Requirement.TraitTest do
     end
 
     test "returns a function that fails with a previous" do
-      check all(table <- Gen.table(bid: Gen.bid(), prev: list_of(Gen.bid(ignore_strains: [:pass, :double, :redouble]), min_length: 1))) do
+      check all(
+              table <-
+                Gen.table(
+                  bid: Gen.bid(),
+                  prev: list_of(Gen.contract_bid(), min_length: 1)
+                )
+            ) do
         refute Trait.opening_bid(table)
       end
     end

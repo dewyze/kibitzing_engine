@@ -13,13 +13,13 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
     end
 
     test "returns true if the bid is a pass" do
-      check all(table <- Gen.table(bid: Gen.bid(only_levels: [:pass], only_strains: [:pass]))) do
+      check all(table <- Gen.table(bid: Gen.pass())) do
         assert Bid.pass(table)
       end
     end
 
     test "returns false if the bid is not a pass" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore_levels: [:pass], ignore_strains: [:pass]))) do
+      check all(table <- Gen.table(bid: Gen.bid(ignore: [:pass], ignore: [:pass]))) do
         refute Bid.pass(table)
       end
     end
@@ -33,7 +33,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
     end
 
     test "returns true if the bid is a double" do
-      check all(table <- Gen.table(bid: Gen.bid(only_levels: [:double], only_strains: [:double]))) do
+      check all(table <- Gen.table(bid: Gen.double())) do
         assert Bid.double(table)
       end
     end
@@ -41,7 +41,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
     test "returns false if the bid is not a double" do
       check all(
               table <-
-                Gen.table(bid: Gen.bid(ignore_levels: [:double], ignore_strains: [:double]))
+                Gen.table(bid: Gen.bid(ignore: [:double], ignore: [:double]))
             ) do
         refute Bid.double(table)
       end
@@ -58,7 +58,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
     test "returns true if the bid is a redouble" do
       check all(
               table <-
-                Gen.table(bid: Gen.bid(only_levels: [:redouble], only_strains: [:redouble]))
+                Gen.table(bid: Gen.redouble())
             ) do
         assert Bid.redouble(table)
       end
@@ -67,7 +67,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
     test "returns false if the bid is not a redouble" do
       check all(
               table <-
-                Gen.table(bid: Gen.bid(ignore_levels: [:redouble], ignore_strains: [:redouble]))
+                Gen.table(bid: Gen.bid(ignore: [:redouble], ignore: [:redouble]))
             ) do
         refute Bid.redouble(table)
       end

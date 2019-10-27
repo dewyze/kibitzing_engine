@@ -217,4 +217,148 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
       end
     end
   end
+
+  describe "lower_than" do
+    test "returns the same as 'lt'" do
+      check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do
+        bid_func = fn _ -> {:ok, bid} end
+        assert Strain.lt(bid_func).(table) == Strain.lower_than(bid_func).(table)
+      end
+    end
+
+    test "with 1 arg returns the same as with 2 args" do
+      check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do
+        bid_func = fn _ -> {:ok, bid} end
+        assert Strain.lower_than(bid_func).(table) == Strain.lower_than(bid_func, table)
+      end
+    end
+
+    test "returns false if the previous bid is clubs" do
+      check all(
+              bid <- Gen.contract_bid(only: [:clubs]),
+              table <- Gen.table()
+            ) do
+        bid_func = fn _ -> {:ok, bid} end
+        refute Strain.lower_than(bid_func, table)
+      end
+    end
+
+    test "returns false if the current bid is an action bid" do
+      check all(
+              bid <- Gen.bid(),
+              table <- Gen.table(bid: Gen.action_bid())
+            ) do
+        bid_func = fn _ -> {:ok, bid} end
+        refute Strain.lower_than(bid_func, table)
+      end
+    end
+
+    test "returns false if the current bid is no_trump" do
+      check all(
+              bid <- Gen.bid(),
+              table <- Gen.table(bid: Gen.bid(only: [:no_trump]))
+            ) do
+        bid_func = fn _ -> {:ok, bid} end
+        refute Strain.lower_than(bid_func, table)
+      end
+    end
+
+    test "returns true if a bid's strain is lower than a previous one" do
+      strains = Strain.strains()
+
+      check all(
+              {_, strain, _} = higher_bid <- Gen.contract_bid(ignore: [:clubs]),
+              lower_strains = Enum.take_while(strains, fn s -> s != strain end),
+              table <- Gen.table(bid: Gen.contract_bid(only: lower_strains))
+            ) do
+        bid_func = fn _ -> {:ok, higher_bid} end
+        assert Strain.lower_than(bid_func, table)
+      end
+    end
+
+    test "returns false if a bid's strain is higher than or equal to a previous one" do
+      strains = Enum.reverse(Strain.strains())
+
+      check all(
+              {_, strain, _} = lower_bid <- Gen.contract_bid(ignore: [:no_trump]),
+              hte_strains = Enum.take_while(strains, fn s -> s != strain end),
+              table <- Gen.table(bid: Gen.contract_bid(only: hte_strains))
+            ) do
+        bid_func = fn _ -> {:ok, lower_bid} end
+        refute Strain.lower_than(bid_func, table)
+      end
+    end
+  end
+
+  describe "higher_than" do
+    test "returns the same as 'ht'" do
+      check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do
+        bid_func = fn _ -> {:ok, bid} end
+        assert Strain.ht(bid_func).(table) == Strain.higher_than(bid_func).(table)
+      end
+    end
+
+    test "with 1 arg returns the same as with 2 args" do
+      check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do
+        bid_func = fn _ -> {:ok, bid} end
+        assert Strain.higher_than(bid_func).(table) == Strain.higher_than(bid_func, table)
+      end
+    end
+
+    test "returns false if the previous bid is no_trump" do
+      check all(
+              bid <- Gen.contract_bid(only: [:no_trump]),
+              table <- Gen.table()
+            ) do
+        bid_func = fn _ -> {:ok, bid} end
+        refute Strain.higher_than(bid_func, table)
+      end
+    end
+
+    test "returns false if the current bid is an action bid" do
+      check all(
+              bid <- Gen.bid(),
+              table <- Gen.table(bid: Gen.action_bid())
+            ) do
+        bid_func = fn _ -> {:ok, bid} end
+        refute Strain.higher_than(bid_func, table)
+      end
+    end
+
+    test "returns false if the current bid is clubs" do
+      check all(
+              bid <- Gen.bid(),
+              table <- Gen.table(bid: Gen.bid(only: [:clubs]))
+            ) do
+        bid_func = fn _ -> {:ok, bid} end
+        refute Strain.higher_than(bid_func, table)
+      end
+    end
+
+    test "returns true if a bid's strain is higher than a previous one" do
+      strains = Enum.reverse(Strain.strains())
+
+      check all(
+              {_, strain, _} = lower_bid <- Gen.contract_bid(ignore: [:no_trump]),
+              higher_strains = Enum.take_while(strains, fn s -> s != strain end),
+              table <- Gen.table(bid: Gen.contract_bid(only: higher_strains))
+            ) do
+        bid_func = fn _ -> {:ok, lower_bid} end
+        assert Strain.higher_than(bid_func, table)
+      end
+    end
+
+    test "returns false if a bid's strain is lower than or equal to a previous one" do
+      strains = Strain.strains()
+
+      check all(
+              {_, strain, _} = higher_bid <- Gen.contract_bid(ignore: [:clubs]),
+              lte_strains = Enum.take_while(strains, fn s -> s != strain end),
+              table <- Gen.table(bid: Gen.contract_bid(only: lte_strains))
+            ) do
+        bid_func = fn _ -> {:ok, higher_bid} end
+        refute Strain.higher_than(bid_func, table)
+      end
+    end
+  end
 end

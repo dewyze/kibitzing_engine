@@ -57,4 +57,32 @@ defmodule Kibitzing.Engine.Convention.Requirement.Strain do
       end
     end)
   end
+
+  def lt(func), do: lower_than(func)
+  def lower_than(func), do: fn table -> lower_than(func, table) end
+
+  def lower_than(func, table) do
+    with {:ok, {_, other_strain, _}} <- func.(table),
+         {_, strain, _} <- table.bid do
+      Enum.find_index(@strains, fn s -> s == other_strain end) >
+        Enum.find_index(@strains, fn s -> s == strain end)
+    else
+      _ ->
+        false
+    end
+  end
+
+  def ht(func), do: higher_than(func)
+  def higher_than(func), do: fn table -> higher_than(func, table) end
+
+  def higher_than(func, table) do
+    with {:ok, {_, other_strain, _}} <- func.(table),
+         {_, strain, _} <- table.bid do
+      Enum.find_index(@strains, fn s -> s == strain end) >
+        Enum.find_index(@strains, fn s -> s == other_strain end)
+    else
+      _ ->
+        false
+    end
+  end
 end

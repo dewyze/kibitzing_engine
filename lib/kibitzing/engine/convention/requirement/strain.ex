@@ -58,6 +58,19 @@ defmodule Kibitzing.Engine.Convention.Requirement.Strain do
     end)
   end
 
+  def eq(func), do: equal_to(func)
+  def equal_to(func), do: fn table -> equal_to(func, table) end
+
+  def equal_to(func, table) do
+    with {:ok, {_, other_strain, _}} <- func.(table),
+         {_, strain, _} <- table.bid do
+      other_strain == strain
+    else
+      _ ->
+        false
+    end
+  end
+
   def lt(func), do: lower_than(func)
   def lower_than(func), do: fn table -> lower_than(func, table) end
 

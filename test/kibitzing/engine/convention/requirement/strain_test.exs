@@ -218,6 +218,49 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
   end
 
+  describe "equal_to" do
+    test "returns the same as 'eq'" do
+      check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do
+        bid_func = fn _ -> {:ok, bid} end
+        assert Strain.eq(bid_func).(table) == Strain.equal_to(bid_func).(table)
+      end
+    end
+
+    test "with 1 arg returns the same as with 2 args" do
+      check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do
+        bid_func = fn _ -> {:ok, bid} end
+        assert Strain.equal_to(bid_func).(table) == Strain.equal_to(bid_func, table)
+      end
+    end
+
+    test "returns false if the current bid is an action bid" do
+      check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.action_bid())) do
+        bid_func = fn _ -> {:ok, bid} end
+        refute Strain.equal_to(bid_func, table)
+      end
+    end
+
+    test "returns true if the current bid is the same strain as the other bid" do
+      check all(
+              {_, strain, _} = bid <- Gen.contract_bid(),
+              table <- Gen.table(bid: Gen.contract_bid(only: [strain]))
+            ) do
+        bid_func = fn _ -> {:ok, bid} end
+        assert Strain.equal_to(bid_func, table)
+      end
+    end
+
+    test "returns false if the current bid is not the same strain as the other bid" do
+      check all(
+              {_, strain, _} = bid <- Gen.contract_bid(),
+              table <- Gen.table(bid: Gen.contract_bid(ignore: [strain]))
+            ) do
+        bid_func = fn _ -> {:ok, bid} end
+        refute Strain.equal_to(bid_func, table)
+      end
+    end
+  end
+
   describe "lower_than" do
     test "returns the same as 'lt'" do
       check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do

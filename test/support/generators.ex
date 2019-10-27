@@ -47,6 +47,22 @@ defmodule Support.Generators do
     end
   end
 
+  @spec action_bid() :: no_return
+  @spec action_bid(keyword()) :: no_return
+  def action_bid(options \\ Keyword.new()) do
+    only_actions = Keyword.get(options, :only, [:pass, :double, :redouble])
+    ignore_actions = Keyword.get(options, :ignore, [])
+    seats = Keyword.get(options, :seats, [:N, :E, :S, :W])
+    actions = only_actions -- ignore_actions
+
+    gen all(
+          action <- member_of(actions),
+          seat <- member_of(seats)
+        ) do
+      {action, seat}
+    end
+  end
+
   @spec pass :: no_return
   def pass do
     gen all(seat <- member_of([:N, :E, :S, :W])) do

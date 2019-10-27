@@ -12,14 +12,14 @@ defmodule Kibitzing.Engine.Convention.Requirement.TraitTest do
       end
     end
 
-    test "returns a function that returns true if it is the first bid" do
+    test "returns true if it is the first bid" do
       check all(table <- Gen.table()) do
         table = %{table | previous_bids: []}
         assert Trait.opening_bid(table)
       end
     end
 
-    test "returns a function that returns true if it is the first non pass" do
+    test "returns true if it is the first non pass" do
       check all(
               table <-
                 Gen.table(
@@ -31,7 +31,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.TraitTest do
       end
     end
 
-    test "returns a function that fails with a previous" do
+    test "returns false with a previous bid" do
       check all(
               table <-
                 Gen.table(

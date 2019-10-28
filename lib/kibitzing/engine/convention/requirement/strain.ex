@@ -18,6 +18,18 @@ defmodule Kibitzing.Engine.Convention.Requirement.Strain do
     @minors
   end
 
+  def lower_strains({_, strain, _}), do: lower_strains(strain)
+
+  def lower_strains(strain) do
+    Enum.take_while(@strains, fn l -> l != strain end)
+  end
+
+  def higher_strains({_, strain, _}), do: higher_strains(strain)
+
+  def higher_strains(strain) do
+    tl(Enum.drop_while(@strains, fn l -> l != strain end))
+  end
+
   def no_trump, do: &no_trump/1
   def no_trump(table), do: match?(%Table{bid: {_, :no_trump, _}}, table)
 

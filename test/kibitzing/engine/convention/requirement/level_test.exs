@@ -5,12 +5,6 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
   alias Kibitzing.Engine.Convention.Requirement.Level
   alias Support.Generators, as: Gen
 
-  describe "levels" do
-    test "returns all possible levels" do
-      assert Level.levels() == [:one, :two, :three, :four, :five, :six, :seven]
-    end
-  end
-
   describe "one" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table()) do

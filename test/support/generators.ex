@@ -1,7 +1,8 @@
 defmodule Support.Generators do
   use ExUnitProperties
 
-  alias Kibitzing.Engine.Convention.Requirement.{Level, Strain, UnreachableError}
+  alias Kibitzing.Engine.Models.{Strain, Level}
+  alias Kibitzing.Engine.Convention.Requirement.{UnreachableError}
   alias Kibitzing.Engine.Convention.Table
 
   @spec n_bid() :: no_return
@@ -17,8 +18,8 @@ defmodule Support.Generators do
   @spec contract_bid() :: no_return
   @spec contract_bid(keyword()) :: no_return
   def contract_bid(options \\ Keyword.new()) do
-    all_levels = Level.levels()
-    all_strains = Strain.strains()
+    all_levels = Level.all()
+    all_strains = Strain.all()
 
     only = Keyword.get(options, :only, [])
     ignore = Keyword.get(options, :ignore, [])

@@ -1,12 +1,6 @@
 defmodule Kibitzing.Engine.Convention.Requirement.Level do
   alias Kibitzing.Engine.Convention.Table
 
-  @levels [:one, :two, :three, :four, :five, :six, :seven]
-
-  def levels do
-    @levels
-  end
-
   def one, do: &one/1
   def one(%Table{bid: bid}), do: match?({:one, _, _}, bid)
 

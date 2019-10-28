@@ -1,34 +1,6 @@
 defmodule Kibitzing.Engine.Convention.Requirement.Strain do
   alias Kibitzing.Engine.Convention.Table
-
-  @majors [:hearts, :spades]
-  @minors [:clubs, :diamonds]
-  @suits @minors ++ @majors
-  @strains @suits ++ [:no_trump]
-
-  def strains do
-    @strains
-  end
-
-  def majors do
-    @majors
-  end
-
-  def minors do
-    @minors
-  end
-
-  def lower_strains({_, strain, _}), do: lower_strains(strain)
-
-  def lower_strains(strain) do
-    Enum.take_while(@strains, fn l -> l != strain end)
-  end
-
-  def higher_strains({_, strain, _}), do: higher_strains(strain)
-
-  def higher_strains(strain) do
-    tl(Enum.drop_while(@strains, fn l -> l != strain end))
-  end
+  alias Kibitzing.Engine.Models.Strain
 
   def no_trump, do: &no_trump/1
   def no_trump(table), do: match?(%Table{bid: {_, :no_trump, _}}, table)
@@ -46,15 +18,15 @@ defmodule Kibitzing.Engine.Convention.Requirement.Strain do
   def clubs(%Table{bid: bid}), do: match?({_, :clubs, _}, bid)
 
   def major, do: &major/1
-  def major(%Table{bid: {_, strain, _}}), do: Enum.member?(@majors, strain)
+  def major(%Table{bid: {_, strain, _}}), do: Enum.member?(Strain.majors(), strain)
   def major(_), do: false
 
   def minor, do: &minor/1
-  def minor(%Table{bid: {_, strain, _}}), do: Enum.member?(@minors, strain)
+  def minor(%Table{bid: {_, strain, _}}), do: Enum.member?(Strain.minors(), strain)
   def minor(_), do: false
 
   def suit, do: &suit/1
-  def suit(%Table{bid: {_, strain, _}}), do: Enum.member?(@suits, strain)
+  def suit(%Table{bid: {_, strain, _}}), do: Enum.member?(Strain.suits(), strain)
   def suit(_), do: false
 
   def new_strain, do: &new_strain/1
@@ -89,8 +61,8 @@ defmodule Kibitzing.Engine.Convention.Requirement.Strain do
   def lower_than(func, table) do
     with {:ok, {_, other_strain, _}} <- func.(table),
          {_, strain, _} <- table.bid do
-      Enum.find_index(@strains, fn s -> s == other_strain end) >
-        Enum.find_index(@strains, fn s -> s == strain end)
+      Enum.find_index(Strain.all(), fn s -> s == other_strain end) >
+        Enum.find_index(Strain.all(), fn s -> s == strain end)
     else
       _ ->
         false
@@ -103,8 +75,8 @@ defmodule Kibitzing.Engine.Convention.Requirement.Strain do
   def higher_than(func, table) do
     with {:ok, {_, other_strain, _}} <- func.(table),
          {_, strain, _} <- table.bid do
-      Enum.find_index(@strains, fn s -> s == strain end) >
-        Enum.find_index(@strains, fn s -> s == other_strain end)
+      Enum.find_index(Strain.all(), fn s -> s == strain end) >
+        Enum.find_index(Strain.all(), fn s -> s == other_strain end)
     else
       _ ->
         false

@@ -11,6 +11,48 @@ defmodule Kibitzing.Engine.Models.LevelTest do
     end
   end
 
+  describe "higher" do
+    test "returns true if the first level is higher than the second" do
+      check all(
+              {level, _, _} = bid_1 <- Gen.contract_bid(ignore: [:one]),
+              bid_2 <- Gen.contract_bid(only: Level.lower_levels(level))
+            ) do
+        assert Level.higher?(bid_1, bid_2)
+      end
+    end
+
+    test "returns false if the first bid is lower than or equal to the second" do
+      check all(
+              {level, _, _} = bid_1 <- Gen.contract_bid(ignore: [:seven]),
+              levels = Level.higher_levels(level) ++ [level],
+              bid_2 <- Gen.contract_bid(only: levels)
+            ) do
+        refute Level.higher?(bid_1, bid_2)
+      end
+    end
+  end
+
+  describe "lower" do
+    test "returns true if the first level is lower than the second" do
+      check all(
+              {level, _, _} = bid_1 <- Gen.contract_bid(ignore: [:seven]),
+              bid_2 <- Gen.contract_bid(only: Level.higher_levels(level))
+            ) do
+        assert Level.lower?(bid_1, bid_2)
+      end
+    end
+
+    test "returns false if the first level is higher than or equal to the second" do
+      check all(
+              {level, _, _} = bid_1 <- Gen.contract_bid(ignore: [:one]),
+              levels = Level.lower_levels(level) ++ [level],
+              bid_2 <- Gen.contract_bid(only: levels)
+            ) do
+        refute Level.lower?(bid_1, bid_2)
+      end
+    end
+  end
+
   describe "lower_levels" do
     test "returns an empty list for one" do
       check all(bid <- Gen.contract_bid(only: [:one])) do

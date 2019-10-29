@@ -20,6 +20,22 @@ defmodule Kibitzing.Engine.Models.Strain do
     @suits
   end
 
+  def higher?({_, strain_1, _}, {_, strain_2, _}), do: higher?(strain_1, strain_2)
+
+  def higher?(strain_1, strain_2) do
+    index(strain_1) > index(strain_2)
+  end
+
+  def lower?({_, strain_1, _}, {_, strain_2, _}), do: lower?(strain_1, strain_2)
+
+  def lower?(strain_1, strain_2) do
+    index(strain_1) < index(strain_2)
+  end
+
+  defp index(strain) do
+    Enum.find_index(@all, &(&1 == strain))
+  end
+
   def lower_strains({_, strain, _}), do: lower_strains(strain)
 
   def lower_strains(strain) do

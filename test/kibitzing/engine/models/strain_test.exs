@@ -29,6 +29,48 @@ defmodule Kibitzing.Engine.Models.StrainTest do
     end
   end
 
+  describe "higher" do
+    test "returns true if the first strain is higher than the second" do
+      check all(
+              {_, strain, _} = bid_1 <- Gen.contract_bid(ignore: [:clubs]),
+              bid_2 <- Gen.contract_bid(only: Strain.lower_strains(strain))
+            ) do
+        assert Strain.higher?(bid_1, bid_2)
+      end
+    end
+
+    test "returns false if the first bid is lower than or equal to the second" do
+      check all(
+              {_, strain, _} = bid_1 <- Gen.contract_bid(ignore: [:no_trump]),
+              strains = Strain.higher_strains(strain) ++ [strain],
+              bid_2 <- Gen.contract_bid(only: strains)
+            ) do
+        refute Strain.higher?(bid_1, bid_2)
+      end
+    end
+  end
+
+  describe "lower" do
+    test "returns true if the first strain is lower than the second" do
+      check all(
+              {_, strain, _} = bid_1 <- Gen.contract_bid(ignore: [:no_trump]),
+              bid_2 <- Gen.contract_bid(only: Strain.higher_strains(strain))
+            ) do
+        assert Strain.lower?(bid_1, bid_2)
+      end
+    end
+
+    test "returns false if the first strain is higher than or equal to the second" do
+      check all(
+              {_, strain, _} = bid_1 <- Gen.contract_bid(ignore: [:clubs]),
+              strains = Strain.lower_strains(strain) ++ [strain],
+              bid_2 <- Gen.contract_bid(only: strains)
+            ) do
+        refute Strain.lower?(bid_1, bid_2)
+      end
+    end
+  end
+
   describe "lower_strains" do
     test "returns lower strains for no_trump" do
       check all(bid <- Gen.contract_bid(only: [:no_trump])) do

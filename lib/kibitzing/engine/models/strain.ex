@@ -23,12 +23,12 @@ defmodule Kibitzing.Engine.Models.Strain do
   def lower_strains({_, strain, _}), do: lower_strains(strain)
 
   def lower_strains(strain) do
-    Enum.take_while(@all, fn l -> l != strain end)
+    Enum.take_while(@all, fn s -> s != strain end)
   end
 
   def higher_strains({_, strain, _}), do: higher_strains(strain)
 
   def higher_strains(strain) do
-    tl(Enum.drop_while(@all, fn l -> l != strain end))
+    tl(Enum.drop_while(@all, fn s -> s != strain end))
   end
 end

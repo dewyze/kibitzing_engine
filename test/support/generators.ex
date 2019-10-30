@@ -105,6 +105,19 @@ defmodule Support.Generators do
     end
   end
 
+  @spec jump_shift(any()) :: no_return
+  def jump_shift({level, strain, _}) do
+    seats = [:N, :E, :S, :W]
+
+    gen all(
+          level <- member_of(Level.higher_levels(level)),
+          strain <- member_of(Strain.higher_strains(strain)),
+          seat <- member_of(seats)
+        ) do
+      {level, strain, seat}
+    end
+  end
+
   @spec bid() :: no_return
   @spec bid(keyword()) :: no_return
   def bid(options \\ Keyword.new()) do

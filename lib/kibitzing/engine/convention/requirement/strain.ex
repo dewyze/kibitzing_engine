@@ -1,6 +1,5 @@
 defmodule Kibitzing.Engine.Convention.Requirement.Strain do
-  alias Kibitzing.Engine.Convention.Table
-  alias Kibitzing.Engine.Models.Strain
+  alias Kibitzing.Engine.Models.{Strain, Table}
 
   def no_trump, do: &no_trump/1
   def no_trump(table), do: match?(%Table{bid: {_, :no_trump, _}}, table)

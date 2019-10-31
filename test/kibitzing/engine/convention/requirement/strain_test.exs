@@ -3,9 +3,8 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
   use ExUnitProperties
   alias Support.Generators, as: Gen
   # doctest Kibitzing.Engine.Convention.Requirement.Strain
-  alias Kibitzing.Engine.Models.Strain
+  alias Kibitzing.Engine.Models.{Strain, Table}
   alias Kibitzing.Engine.Convention.Requirement.Strain, as: Req
-  alias Kibitzing.Engine.Convention.Table
 
   describe "no_trump" do
     test "with no args returns the same as with args" do

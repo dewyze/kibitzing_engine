@@ -1,9 +1,8 @@
 defmodule Support.Generators do
   use ExUnitProperties
 
-  alias Kibitzing.Engine.Models.{Strain, Level}
+  alias Kibitzing.Engine.Models.{Level, Strain, Table}
   alias Kibitzing.Engine.Convention.Requirement.{UnreachableError}
-  alias Kibitzing.Engine.Convention.Table
 
   @spec n_bid() :: no_return
   def n_bid, do: bid(seats: [:N])
@@ -14,7 +13,6 @@ defmodule Support.Generators do
   @spec w_bid() :: no_return
   def w_bid, do: bid(seats: [:S])
 
-  # TODO: Should generate passes as well
   @spec contract_bid() :: no_return
   @spec contract_bid(keyword()) :: no_return
   def contract_bid(options \\ Keyword.new()) do

@@ -1,5 +1,5 @@
 defmodule Kibitzing.Engine.Convention.Requirement.Level do
-  alias Kibitzing.Engine.Convention.Table
+  alias Kibitzing.Engine.Models.Table
 
   def one, do: &one/1
   def one(%Table{bid: bid}), do: match?({:one, _, _}, bid)

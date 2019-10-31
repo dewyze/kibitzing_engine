@@ -3,7 +3,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
   use ExUnitProperties
   # doctest Kibitzing.Engine.Convention.Requirement.Bid
   alias Kibitzing.Engine.Convention.Requirement.Bid
-  alias Kibitzing.Engine.Convention.Table
+  alias Kibitzing.Engine.Models.Table
   alias Support.Generators, as: Gen
 
   describe "pass" do

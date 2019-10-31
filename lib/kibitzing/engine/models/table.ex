@@ -1,4 +1,4 @@
-defmodule Kibitzing.Engine.Convention.Table do
+defmodule Kibitzing.Engine.Models.Table do
   defstruct previous_bids: [],
             bid: nil,
             next_bids: []

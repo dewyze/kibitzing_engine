@@ -41,7 +41,7 @@ defmodule Kibitzing.Engine.Models.StrainTest do
 
     test "returns false if the first bid is lower than or equal to the second" do
       check all(
-              {_, strain, _} = bid_1 <- Gen.contract_bid(ignore: [:no_trump]),
+              {_, strain, _} = bid_1 <- Gen.suit_bid(),
               strains = Strain.higher_strains(strain) ++ [strain],
               bid_2 <- Gen.contract_bid(only: strains)
             ) do
@@ -53,7 +53,7 @@ defmodule Kibitzing.Engine.Models.StrainTest do
   describe "lower" do
     test "returns true if the first strain is lower than the second" do
       check all(
-              {_, strain, _} = bid_1 <- Gen.contract_bid(ignore: [:no_trump]),
+              {_, strain, _} = bid_1 <- Gen.suit_bid(),
               bid_2 <- Gen.contract_bid(only: Strain.higher_strains(strain))
             ) do
         assert Strain.lower?(bid_1, bid_2)

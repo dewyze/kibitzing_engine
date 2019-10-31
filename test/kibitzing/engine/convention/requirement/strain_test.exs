@@ -156,7 +156,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     test "returns true if a contract bid is a suit" do
       check all(
               table <-
-                Gen.table(bid: Gen.contract_bid(ignore: [:no_trump]))
+                Gen.table(bid: Gen.suit_bid())
             ) do
         assert Req.suit(table)
       end
@@ -300,7 +300,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
 
     test "returns false if a bid's strain is higher than a previous one" do
       check all(
-              {_, strain, _} = lower_bid <- Gen.contract_bid(ignore: [:no_trump]),
+              {_, strain, _} = lower_bid <- Gen.suit_bid(),
               table <- Gen.table(bid: Gen.contract_bid(only: Strain.higher_strains(strain)))
             ) do
         bid_func = fn _ -> {:ok, lower_bid} end
@@ -310,7 +310,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
 
     test "returns false if a bid's strain is equal to a previous one" do
       check all(
-              {_, strain, _} = lower_bid <- Gen.contract_bid(ignore: [:no_trump]),
+              {_, strain, _} = lower_bid <- Gen.suit_bid(),
               table <- Gen.table(bid: Gen.contract_bid(only: [strain]))
             ) do
         bid_func = fn _ -> {:ok, lower_bid} end
@@ -366,7 +366,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
 
     test "returns true if a bid's strain is higher than a previous one" do
       check all(
-              {_, strain, _} = lower_bid <- Gen.contract_bid(ignore: [:no_trump]),
+              {_, strain, _} = lower_bid <- Gen.suit_bid(),
               table <- Gen.table(bid: Gen.contract_bid(only: Strain.higher_strains(strain)))
             ) do
         bid_func = fn _ -> {:ok, lower_bid} end

@@ -51,6 +51,14 @@ defmodule Support.Generators do
     end
   end
 
+  @spec suit_bid() :: no_return
+  @spec suit_bid(keyword()) :: no_return
+  def suit_bid(options \\ Keyword.new()) do
+    ignore = Keyword.get(options, :ignore, []) ++ [:no_trump]
+
+    contract_bid(ignore: ignore)
+  end
+
   @spec action_bid() :: no_return
   @spec action_bid(keyword()) :: no_return
   def action_bid(options \\ Keyword.new()) do

@@ -55,43 +55,43 @@ defmodule Kibitzing.Engine.Models.LevelTest do
 
   describe "lower_levels" do
     test "returns an empty list for one" do
-      check all(bid <- Gen.contract_bid(only: [:one])) do
+      check all(bid <- Gen.one_bid()) do
         assert Level.lower_levels(bid) == []
       end
     end
 
     test "returns higher levels for two" do
-      check all(bid <- Gen.contract_bid(only: [:two])) do
+      check all(bid <- Gen.two_bid()) do
         assert Level.lower_levels(bid) == [:one]
       end
     end
 
     test "returns higher levels for three" do
-      check all(bid <- Gen.contract_bid(only: [:three])) do
+      check all(bid <- Gen.three_bid()) do
         assert Level.lower_levels(bid) == [:one, :two]
       end
     end
 
     test "returns higher levels for four" do
-      check all(bid <- Gen.contract_bid(only: [:four])) do
+      check all(bid <- Gen.four_bid()) do
         assert Level.lower_levels(bid) == [:one, :two, :three]
       end
     end
 
     test "returns higher levels for five" do
-      check all(bid <- Gen.contract_bid(only: [:five])) do
+      check all(bid <- Gen.five_bid()) do
         assert Level.lower_levels(bid) == [:one, :two, :three, :four]
       end
     end
 
     test "returns higher levels for six" do
-      check all(bid <- Gen.contract_bid(only: [:six])) do
+      check all(bid <- Gen.six_bid()) do
         assert Level.lower_levels(bid) == [:one, :two, :three, :four, :five]
       end
     end
 
     test "returns higher levels for seven" do
-      check all(bid <- Gen.contract_bid(only: [:seven])) do
+      check all(bid <- Gen.seven_bid()) do
         assert Level.lower_levels(bid) == [:one, :two, :three, :four, :five, :six]
       end
     end
@@ -99,43 +99,43 @@ defmodule Kibitzing.Engine.Models.LevelTest do
 
   describe "higher_levels" do
     test "returns higher levels for one" do
-      check all(bid <- Gen.contract_bid(only: [:one])) do
+      check all(bid <- Gen.one_bid()) do
         assert Level.higher_levels(bid) == [:two, :three, :four, :five, :six, :seven]
       end
     end
 
     test "returns higher levels for two" do
-      check all(bid <- Gen.contract_bid(only: [:two])) do
+      check all(bid <- Gen.two_bid()) do
         assert Level.higher_levels(bid) == [:three, :four, :five, :six, :seven]
       end
     end
 
     test "returns higher levels for three" do
-      check all(bid <- Gen.contract_bid(only: [:three])) do
+      check all(bid <- Gen.three_bid()) do
         assert Level.higher_levels(bid) == [:four, :five, :six, :seven]
       end
     end
 
     test "returns higher levels for four" do
-      check all(bid <- Gen.contract_bid(only: [:four])) do
+      check all(bid <- Gen.four_bid()) do
         assert Level.higher_levels(bid) == [:five, :six, :seven]
       end
     end
 
     test "returns higher levels for five" do
-      check all(bid <- Gen.contract_bid(only: [:five])) do
+      check all(bid <- Gen.five_bid()) do
         assert Level.higher_levels(bid) == [:six, :seven]
       end
     end
 
     test "returns higher levels for six" do
-      check all(bid <- Gen.contract_bid(only: [:six])) do
+      check all(bid <- Gen.six_bid()) do
         assert Level.higher_levels(bid) == [:seven]
       end
     end
 
     test "returns an empty list for seven" do
-      check all(bid <- Gen.contract_bid(only: [:seven])) do
+      check all(bid <- Gen.seven_bid()) do
         assert Level.higher_levels(bid) == []
       end
     end

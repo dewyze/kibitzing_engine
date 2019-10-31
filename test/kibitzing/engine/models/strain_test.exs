@@ -73,31 +73,31 @@ defmodule Kibitzing.Engine.Models.StrainTest do
 
   describe "lower_strains" do
     test "returns lower strains for no_trump" do
-      check all(bid <- Gen.contract_bid(only: [:no_trump])) do
+      check all(bid <- Gen.no_trump_bid()) do
         assert Strain.lower_strains(bid) == [:clubs, :diamonds, :hearts, :spades]
       end
     end
 
     test "returns lower strains for spades" do
-      check all(bid <- Gen.contract_bid(only: [:spades])) do
+      check all(bid <- Gen.spade_bid()) do
         assert Strain.lower_strains(bid) == [:clubs, :diamonds, :hearts]
       end
     end
 
     test "returns lower strains for hearts" do
-      check all(bid <- Gen.contract_bid(only: [:hearts])) do
+      check all(bid <- Gen.heart_bid()) do
         assert Strain.lower_strains(bid) == [:clubs, :diamonds]
       end
     end
 
     test "returns lower strains for diamonds" do
-      check all(bid <- Gen.contract_bid(only: [:diamonds])) do
+      check all(bid <- Gen.diamond_bid()) do
         assert Strain.lower_strains(bid) == [:clubs]
       end
     end
 
     test "returns an empty list for clubs" do
-      check all(bid <- Gen.contract_bid(only: [:clubs])) do
+      check all(bid <- Gen.club_bid()) do
         assert Strain.lower_strains(bid) == []
       end
     end
@@ -105,31 +105,31 @@ defmodule Kibitzing.Engine.Models.StrainTest do
 
   describe "higher_strains" do
     test "returns an empty list for no_trump" do
-      check all(bid <- Gen.contract_bid(only: [:no_trump])) do
+      check all(bid <- Gen.no_trump_bid()) do
         assert Strain.higher_strains(bid) == []
       end
     end
 
     test "returns higher strains for spades" do
-      check all(bid <- Gen.contract_bid(only: [:spades])) do
+      check all(bid <- Gen.spade_bid()) do
         assert Strain.higher_strains(bid) == [:no_trump]
       end
     end
 
     test "returns higher strains for hearts" do
-      check all(bid <- Gen.contract_bid(only: [:hearts])) do
+      check all(bid <- Gen.heart_bid()) do
         assert Strain.higher_strains(bid) == [:spades, :no_trump]
       end
     end
 
     test "returns higher strains for diamonds" do
-      check all(bid <- Gen.contract_bid(only: [:diamonds])) do
+      check all(bid <- Gen.diamond_bid()) do
         assert Strain.higher_strains(bid) == [:hearts, :spades, :no_trump]
       end
     end
 
     test "returns an empty list for clubs" do
-      check all(bid <- Gen.contract_bid(only: [:clubs])) do
+      check all(bid <- Gen.club_bid()) do
         assert Strain.higher_strains(bid) == [:diamonds, :hearts, :spades, :no_trump]
       end
     end

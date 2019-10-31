@@ -59,6 +59,19 @@ defmodule Support.Generators do
     contract_bid(ignore: ignore)
   end
 
+  # Define helpers for all levels/suits
+  (Strain.all() ++ Level.all())
+  |> Enum.map(fn n -> {:"#{String.trim_trailing(Atom.to_string(n), "s")}_bid", n} end)
+  |> Enum.each(fn {method, filter} ->
+    @spec unquote(method)() :: no_return
+    @spec unquote(method)(keyword()) :: no_return
+    def unquote(method)(options \\ Keyword.new()) do
+      ignore = Keyword.get(options, :ignore, [])
+
+      contract_bid(only: [unquote(filter)], ignore: ignore)
+    end
+  end)
+
   @spec action_bid() :: no_return
   @spec action_bid(keyword()) :: no_return
   def action_bid(options \\ Keyword.new()) do

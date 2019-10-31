@@ -14,7 +14,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns true if a bid is no trump" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:no_trump]))) do
+      check all(table <- Gen.table(bid: Gen.no_trump_bid())) do
         assert Req.no_trump(table)
       end
     end
@@ -34,7 +34,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns true if a bid is spades trump" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:spades]))) do
+      check all(table <- Gen.table(bid: Gen.spade_bid())) do
         assert Req.spades(table)
       end
     end
@@ -54,7 +54,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns true if a bid is hearts trump" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:hearts]))) do
+      check all(table <- Gen.table(bid: Gen.heart_bid())) do
         assert Req.hearts(table)
       end
     end
@@ -74,7 +74,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns true if a bid is diamonds trump" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:diamonds]))) do
+      check all(table <- Gen.table(bid: Gen.diamond_bid())) do
         assert Req.diamonds(table)
       end
     end
@@ -94,7 +94,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     end
 
     test "returns true if a bid is clubs trump" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:clubs]))) do
+      check all(table <- Gen.table(bid: Gen.club_bid())) do
         assert Req.clubs(table)
       end
     end
@@ -260,7 +260,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
 
     test "returns false if the previous bid is clubs" do
       check all(
-              bid <- Gen.contract_bid(only: [:clubs]),
+              bid <- Gen.club_bid(),
               table <- Gen.table()
             ) do
         bid_func = fn _ -> {:ok, bid} end
@@ -281,7 +281,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     test "returns false if the current bid is no_trump" do
       check all(
               bid <- Gen.bid(),
-              table <- Gen.table(bid: Gen.bid(only: [:no_trump]))
+              table <- Gen.table(bid: Gen.no_trump_bid())
             ) do
         bid_func = fn _ -> {:ok, bid} end
         refute Req.lower_than(bid_func, table)
@@ -336,7 +336,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
 
     test "returns false if the previous bid is no_trump" do
       check all(
-              bid <- Gen.contract_bid(only: [:no_trump]),
+              bid <- Gen.no_trump_bid(),
               table <- Gen.table()
             ) do
         bid_func = fn _ -> {:ok, bid} end
@@ -357,7 +357,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     test "returns false if the current bid is clubs" do
       check all(
               bid <- Gen.bid(),
-              table <- Gen.table(bid: Gen.bid(only: [:clubs]))
+              table <- Gen.table(bid: Gen.club_bid())
             ) do
         bid_func = fn _ -> {:ok, bid} end
         refute Req.higher_than(bid_func, table)

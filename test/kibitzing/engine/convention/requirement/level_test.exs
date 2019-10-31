@@ -13,7 +13,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
     end
 
     test "returns trues if a bid is at the one level" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:one]))) do
+      check all(table <- Gen.table(bid: Gen.one_bid())) do
         assert Level.one(table)
       end
     end
@@ -33,7 +33,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
     end
 
     test "returns true if a bid is at the two level" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:two]))) do
+      check all(table <- Gen.table(bid: Gen.two_bid())) do
         assert Level.two(table)
       end
     end
@@ -53,7 +53,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
     end
 
     test "returns true if a bid is at the three level" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:three]))) do
+      check all(table <- Gen.table(bid: Gen.three_bid())) do
         assert Level.three(table)
       end
     end
@@ -73,7 +73,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
     end
 
     test "returns true if a bid is at the four level" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:four]))) do
+      check all(table <- Gen.table(bid: Gen.four_bid())) do
         assert Level.four(table)
       end
     end
@@ -93,7 +93,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
     end
 
     test "returns true if a bid is at the five level" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:five]))) do
+      check all(table <- Gen.table(bid: Gen.five_bid())) do
         assert Level.five(table)
       end
     end
@@ -113,7 +113,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
     end
 
     test "returns true if a bid is at the six level" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:six]))) do
+      check all(table <- Gen.table(bid: Gen.six_bid())) do
         assert Level.six(table)
       end
     end
@@ -133,7 +133,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
     end
 
     test "returns true if a bid is at the seven level" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: [:seven]))) do
+      check all(table <- Gen.table(bid: Gen.seven_bid())) do
         assert Level.seven(table)
       end
     end

@@ -31,8 +31,8 @@ defmodule Kibitzing.Engine.Convention do
     node(convention, :bid, [&Bid.redouble/1])
   end
 
-  defp node(convention, method, requirements, options \\ Keyword.new()) do
-    node = Node.new(method, requirements, options)
+  defp node(convention, method, objs, options \\ Keyword.new()) do
+    node = Node.new(method, objs, options)
     %{convention | nodes: convention.nodes ++ [node]}
   end
 end

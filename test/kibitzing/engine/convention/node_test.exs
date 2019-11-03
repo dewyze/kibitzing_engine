@@ -49,6 +49,19 @@ defmodule Kibitzing.Engine.Convention.Requirement.NodeTest do
                )
       end
     end
+
+    test "adds a labeled bid to the table" do
+      check all(%Table{bid: bid} = table <- Gen.table()) do
+        req = fn _table -> true end
+        node = %Node{requirements: [req], method: :bid, options: [{:label, :new_bid}]}
+        table = %Table{table | labeled_bids: [{:my_bid, {:one, :spades, :N}}]}
+
+        assert match?(
+                 {:ok, %Table{labeled_bids: [{:new_bid, ^bid}, {:my_bid, {:one, :spades, :N}}]}},
+                 Node.process(table, node)
+               )
+      end
+    end
   end
 
   describe "#process - one_of" do

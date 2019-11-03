@@ -36,7 +36,7 @@ defmodule Kibitzing.Engine.ConventionTest do
         convention = Convention.new(:conv, "conv")
 
         assert match?(
-                 %Convention{nodes: [%Node{method: :one_of, requirements: [^thing_1, ^thing_2]}]},
+                 %Convention{nodes: [%Node{method: :one_of, nodes: [^thing_1, ^thing_2]}]},
                  Convention.one_of(convention, [thing_1, thing_2])
                )
       end

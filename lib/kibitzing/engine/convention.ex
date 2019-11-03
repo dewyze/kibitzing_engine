@@ -15,8 +15,8 @@ defmodule Kibitzing.Engine.Convention do
     node(convention, :bid, requirements, options)
   end
 
-  def one_of(convention, requirements, options \\ Keyword.new()) do
-    node(convention, :one_of, requirements, options)
+  def one_of(convention, nodes, options \\ Keyword.new()) do
+    node(convention, :one_of, nodes, options)
   end
 
   def pass(convention) do

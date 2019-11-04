@@ -3,6 +3,7 @@ defmodule Support.Generators do
 
   alias Kibitzing.Engine.Models.{Level, Strain, Table}
   alias Kibitzing.Engine.Convention.Requirement.{UnreachableError}
+  alias Support.Bids
 
   @spec n_bid() :: no_return
   def n_bid, do: bid(seats: [:N])
@@ -123,6 +124,32 @@ defmodule Support.Generators do
   def bid(options \\ Keyword.new()) do
     gen all(bid <- one_of([contract_bid(options), action_bid(options)])) do
       bid
+    end
+  end
+
+  @spec higher_bid(any()) :: no_return
+  def higher_bid({level, strain, _}) do
+    seats = [:N, :E, :S, :W]
+    higher_bids = tl(Enum.drop_while(Bids.all(), &(&1 != {level, strain})))
+
+    gen all(
+          {level, strain} <- member_of(higher_bids),
+          seat <- member_of(seats)
+        ) do
+      {level, strain, seat}
+    end
+  end
+
+  @spec lower_bid(any()) :: no_return
+  def lower_bid({level, strain, _}) do
+    seats = [:N, :E, :S, :W]
+    lower_bids = Enum.take_while(Bids.all(), &(&1 != {level, strain}))
+
+    gen all(
+          {level, strain} <- member_of(lower_bids),
+          seat <- member_of(seats)
+        ) do
+      {level, strain, seat}
     end
   end
 

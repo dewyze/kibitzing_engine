@@ -20,7 +20,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
     end
 
     test "returns false if the bid is not a pass" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore: [:pass], ignore: [:pass]))) do
+      check all(table <- Gen.table(bid: Gen.bid(ignore: [:pass]))) do
         refute Bid.pass(table)
       end
     end

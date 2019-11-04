@@ -17,6 +17,19 @@ defmodule Kibitzing.Engine.Models.Level do
     index(level_1) < index(level_2)
   end
 
+  def equal?({level, _, _}, {level, _, _}), do: true
+  def equal?(_, _), do: false
+
+  def lte?(bid_1, bid_2) do
+    lower?(bid_1, bid_2) || equal?(bid_1, bid_2)
+  end
+
+  def gte?(bid_1, bid_2), do: hte?(bid_1, bid_2)
+
+  def hte?(bid_1, bid_2) do
+    higher?(bid_1, bid_2) || equal?(bid_1, bid_2)
+  end
+
   defp index(level) do
     Enum.find_index(@all, &(&1 == level))
   end

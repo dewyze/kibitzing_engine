@@ -60,4 +60,50 @@ defmodule Kibitzing.Engine.Models.BidTest do
       end
     end
   end
+
+  describe "#higher" do
+    test "returns true if the bid is higher" do
+      check all(
+              bid <- Gen.contract_bid(),
+              !match?({:seven, :no_trump, _}, bid),
+              higher_bid <- Gen.higher_bid(bid)
+            ) do
+        assert Bid.higher?(higher_bid, bid)
+      end
+    end
+
+    test "returns false if the bid is lower or equal to" do
+      check all(
+              bid <- Gen.contract_bid(),
+              !match?({:one, :clubs, _}, bid),
+              lower_bid <- Gen.lower_bid(bid),
+              bid_2 <- member_of([bid, lower_bid])
+            ) do
+        refute Bid.higher?(bid_2, bid)
+      end
+    end
+  end
+
+  describe "#lower" do
+    test "returns true if the bid is lower" do
+      check all(
+              bid <- Gen.contract_bid(),
+              !match?({:one, :clubs, _}, bid),
+              lower_bid <- Gen.lower_bid(bid)
+            ) do
+        assert Bid.lower?(lower_bid, bid)
+      end
+    end
+
+    test "returns false if the bid is lower or equal to" do
+      check all(
+              bid <- Gen.contract_bid(),
+              !match?({:seven, :no_trump, _}, bid),
+              higher_bid <- Gen.higher_bid(bid),
+              bid_2 <- member_of([bid, higher_bid])
+            ) do
+        refute Bid.lower?(bid_2, bid)
+      end
+    end
+  end
 end

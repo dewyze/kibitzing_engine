@@ -4,7 +4,7 @@ defmodule Kibitzing.Engine.Models.Table do
             next_bids: [],
             labeled_bids: Keyword.new()
 
-  alias Kibitzing.Engine.Models.{Bid, Level, Strain}
+  alias Kibitzing.Engine.Models.Bid
 
   def validate(%__MODULE__{next_bids: bids} = table) do
     if _valid?(bids) && _validate_doubles?(bids) do
@@ -21,8 +21,7 @@ defmodule Kibitzing.Engine.Models.Table do
     cond do
       Bid.action?(bid) ||
         Bid.action?(next) ||
-        (Level.equal?(next, bid) && Strain.higher?(next, bid)) ||
-          Level.higher?(next, bid) ->
+          Bid.higher?(next, bid) ->
         _valid?(bids)
 
       true ->

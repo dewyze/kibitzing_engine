@@ -1,18 +1,5 @@
 defmodule Kibitzing.Engine do
-  @moduledoc """
-  Documentation for Kibitzing.Engine.
-  """
+  def process(table) do
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Kibitzing.Engine.hello()
-      :world
-
-  """
-  def hello do
-    :world
   end
 end

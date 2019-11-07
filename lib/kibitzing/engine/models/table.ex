@@ -2,9 +2,12 @@ defmodule Kibitzing.Engine.Models.Table do
   defstruct previous_bids: [],
             bid: nil,
             next_bids: [],
+            conventions: [],
             labeled_bids: Keyword.new()
 
   alias Kibitzing.Engine.Models.Bid
+
+  # TODO: Add validation errors
 
   def validate(%__MODULE__{next_bids: bids} = table) do
     if _valid?(bids) && _validate_doubles?(bids) do

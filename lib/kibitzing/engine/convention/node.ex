@@ -17,7 +17,9 @@ defmodule Kibitzing.Engine.Convention.Node do
   end
 
   def process(table, %__MODULE__{method: :bid, requirements: reqs, options: options}) do
-    if Enum.all?(reqs, fn req -> req.(table) end) do
+    if Enum.all?(reqs, fn req ->
+         req.(table)
+       end) do
       advance_table(table, options)
     else
       {:fail, table}

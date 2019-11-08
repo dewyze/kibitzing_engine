@@ -15,13 +15,13 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
 
     test "returns true if the bid is a pass" do
       check all(table <- Gen.table(bid: Gen.pass())) do
-        assert Bid.pass(table)
+        assert Bid.pass(table) == :ok
       end
     end
 
     test "returns false if the bid is not a pass" do
       check all(table <- Gen.table(bid: Gen.bid(ignore: [:pass]))) do
-        refute Bid.pass(table)
+        assert Bid.pass(table) == :next
       end
     end
   end
@@ -35,7 +35,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
 
     test "returns true if the bid is a double" do
       check all(table <- Gen.table(bid: Gen.double())) do
-        assert Bid.double(table)
+        assert Bid.double(table) == :ok
       end
     end
 
@@ -44,7 +44,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
               table <-
                 Gen.table(bid: Gen.bid(ignore: [:double], ignore: [:double]))
             ) do
-        refute Bid.double(table)
+        assert Bid.double(table) == :next
       end
     end
   end
@@ -61,7 +61,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
               table <-
                 Gen.table(bid: Gen.redouble())
             ) do
-        assert Bid.redouble(table)
+        assert Bid.redouble(table) == :ok
       end
     end
 
@@ -70,7 +70,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
               table <-
                 Gen.table(bid: Gen.bid(ignore: [:redouble], ignore: [:redouble]))
             ) do
-        refute Bid.redouble(table)
+        assert Bid.redouble(table) == :next
       end
     end
   end

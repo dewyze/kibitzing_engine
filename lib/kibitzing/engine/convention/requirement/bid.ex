@@ -1,14 +1,15 @@
 defmodule Kibitzing.Engine.Convention.Requirement.Bid do
   alias Kibitzing.Engine.Models.{Bid, Table}
+  alias Kibitzing.Engine.Convention.Result
 
   def pass(), do: &pass/1
-  def pass(%Table{bid: bid}), do: Bid.pass?(bid)
+  def pass(%Table{bid: bid}), do: Result.opt(Bid.pass?(bid))
 
   def double(), do: &double/1
-  def double(%Table{bid: bid}), do: Bid.double?(bid)
+  def double(%Table{bid: bid}), do: Result.opt(Bid.double?(bid))
 
   def redouble(), do: &redouble/1
-  def redouble(%Table{bid: bid}), do: Bid.redouble?(bid)
+  def redouble(%Table{bid: bid}), do: Result.opt(Bid.redouble?(bid))
 
   def from_prev_partner(), do: &from_prev_partner/1
 

@@ -3,6 +3,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
   use ExUnitProperties
   # doctest Kibitzing.Engine.Convention.Requirement.Level
   alias Kibitzing.Engine.Convention.Requirement.Level
+  alias Kibitzing.Engine.Models.Level, as: Model
   alias Support.Generators, as: Gen
 
   describe "one" do
@@ -12,15 +13,21 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
       end
     end
 
-    test "returns trues if a bid is at the one level" do
+    test "returns :ok if a bid is at the one level" do
       check all(table <- Gen.table(bid: Gen.one_bid())) do
-        assert Level.one(table)
+        assert Level.one(table) == :ok
+      end
+    end
+
+    test "returns next if the bid is an action bid" do
+      check all(table <- Gen.table(bid: Gen.action_bid())) do
+        assert Level.one(table) == :next
       end
     end
 
     test "returns false if a bid is not at the one level" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore: [:one]))) do
-        refute Level.one(table)
+      check all(table <- Gen.table(bid: Gen.contract_bid(ignore: [:one]))) do
+        assert Level.one(table) == :fail
       end
     end
   end
@@ -32,15 +39,29 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
       end
     end
 
-    test "returns true if a bid is at the two level" do
+    test "returns :ok if a bid is at the two level" do
       check all(table <- Gen.table(bid: Gen.two_bid())) do
-        assert Level.two(table)
+        assert Level.two(table) == :ok
       end
     end
 
-    test "returns false if a bid is not at the two level" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore: [:two]))) do
-        refute Level.two(table)
+    test "returns :next if the bid is lower or a contract bid" do
+      check all(
+              bid <- Gen.two_bid(),
+              levels = Model.lower_levels(bid),
+              table <- Gen.table(bid: one_of([Gen.contract_bid(only: levels), Gen.action_bid()]))
+            ) do
+        assert Level.two(table) == :next
+      end
+    end
+
+    test "returns :fail if the bid is higher" do
+      check all(
+              bid <- Gen.two_bid(),
+              levels = Model.higher_levels(bid),
+              table <- Gen.table(bid: Gen.contract_bid(only: levels))
+            ) do
+        assert Level.two(table) == :fail
       end
     end
   end
@@ -52,15 +73,29 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
       end
     end
 
-    test "returns true if a bid is at the three level" do
+    test "returns :ok if a bid is at the three level" do
       check all(table <- Gen.table(bid: Gen.three_bid())) do
-        assert Level.three(table)
+        assert Level.three(table) == :ok
       end
     end
 
-    test "returns false if a bid is not at the three level" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore: [:three]))) do
-        refute Level.three(table)
+    test "returns :next if the bid is lower or a contract bid" do
+      check all(
+              bid <- Gen.three_bid(),
+              levels = Model.lower_levels(bid),
+              table <- Gen.table(bid: one_of([Gen.contract_bid(only: levels), Gen.action_bid()]))
+            ) do
+        assert Level.three(table) == :next
+      end
+    end
+
+    test "returns :fail if the bid is higher" do
+      check all(
+              bid <- Gen.three_bid(),
+              levels = Model.higher_levels(bid),
+              table <- Gen.table(bid: Gen.contract_bid(only: levels))
+            ) do
+        assert Level.three(table) == :fail
       end
     end
   end
@@ -72,15 +107,29 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
       end
     end
 
-    test "returns true if a bid is at the four level" do
+    test "returns :ok if a bid is at the four level" do
       check all(table <- Gen.table(bid: Gen.four_bid())) do
-        assert Level.four(table)
+        assert Level.four(table) == :ok
       end
     end
 
-    test "returns false if a bid is not at the four level" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore: [:four]))) do
-        refute Level.four(table)
+    test "returns :next if the bid is lower or a contract bid" do
+      check all(
+              bid <- Gen.four_bid(),
+              levels = Model.lower_levels(bid),
+              table <- Gen.table(bid: one_of([Gen.contract_bid(only: levels), Gen.action_bid()]))
+            ) do
+        assert Level.four(table) == :next
+      end
+    end
+
+    test "returns :fail if the bid is higher" do
+      check all(
+              bid <- Gen.four_bid(),
+              levels = Model.higher_levels(bid),
+              table <- Gen.table(bid: Gen.contract_bid(only: levels))
+            ) do
+        assert Level.four(table) == :fail
       end
     end
   end
@@ -92,15 +141,29 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
       end
     end
 
-    test "returns true if a bid is at the five level" do
+    test "returns :ok if a bid is at the five level" do
       check all(table <- Gen.table(bid: Gen.five_bid())) do
-        assert Level.five(table)
+        assert Level.five(table) == :ok
       end
     end
 
-    test "returns false if a bid is not at the five level" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore: [:five]))) do
-        refute Level.five(table)
+    test "returns :next if the bid is lower or a contract bid" do
+      check all(
+              bid <- Gen.five_bid(),
+              levels = Model.lower_levels(bid),
+              table <- Gen.table(bid: one_of([Gen.contract_bid(only: levels), Gen.action_bid()]))
+            ) do
+        assert Level.five(table) == :next
+      end
+    end
+
+    test "returns :fail if the bid is higher" do
+      check all(
+              bid <- Gen.five_bid(),
+              levels = Model.higher_levels(bid),
+              table <- Gen.table(bid: Gen.contract_bid(only: levels))
+            ) do
+        assert Level.five(table) == :fail
       end
     end
   end
@@ -112,15 +175,29 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
       end
     end
 
-    test "returns true if a bid is at the six level" do
+    test "returns :ok if a bid is at the six level" do
       check all(table <- Gen.table(bid: Gen.six_bid())) do
-        assert Level.six(table)
+        assert Level.six(table) == :ok
       end
     end
 
-    test "returns false if a bid is not at the six level" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore: [:six]))) do
-        refute Level.six(table)
+    test "returns :next if the bid is lower or a contract bid" do
+      check all(
+              bid <- Gen.six_bid(),
+              levels = Model.lower_levels(bid),
+              table <- Gen.table(bid: one_of([Gen.contract_bid(only: levels), Gen.action_bid()]))
+            ) do
+        assert Level.six(table) == :next
+      end
+    end
+
+    test "returns :fail if the bid is higher" do
+      check all(
+              bid <- Gen.six_bid(),
+              levels = Model.higher_levels(bid),
+              table <- Gen.table(bid: Gen.contract_bid(only: levels))
+            ) do
+        assert Level.six(table) == :fail
       end
     end
   end
@@ -132,15 +209,19 @@ defmodule Kibitzing.Engine.Convention.Requirement.LevelTest do
       end
     end
 
-    test "returns true if a bid is at the seven level" do
+    test "returns :ok if a bid is at the seven level" do
       check all(table <- Gen.table(bid: Gen.seven_bid())) do
-        assert Level.seven(table)
+        assert Level.seven(table) == :ok
       end
     end
 
-    test "returns false if a bid is not at the seven level" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore: [:seven]))) do
-        refute Level.seven(table)
+    test "returns :next if the bid is lower or a contract bid" do
+      check all(
+              bid <- Gen.seven_bid(),
+              levels = Model.lower_levels(bid),
+              table <- Gen.table(bid: one_of([Gen.contract_bid(only: levels), Gen.action_bid()]))
+            ) do
+        assert Level.seven(table) == :next
       end
     end
   end

@@ -3,25 +3,26 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
   use ExUnitProperties
   alias Support.Generators, as: Gen
   # doctest Kibitzing.Engine.Convention.Requirement.Strain
-  alias Kibitzing.Engine.Models.{Strain, Table}
-  alias Kibitzing.Engine.Convention.Requirement.Strain, as: Req
+  alias Kibitzing.Engine.Models.Table
+  alias Kibitzing.Engine.Models.Strain, as: Model
+  alias Kibitzing.Engine.Convention.Requirement.Strain
 
   describe "no_trump" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table()) do
-        assert Req.no_trump().(table) == Req.no_trump(table)
+        assert Strain.no_trump().(table) == Strain.no_trump(table)
       end
     end
 
     test "returns true if a bid is no trump" do
       check all(table <- Gen.table(bid: Gen.no_trump_bid())) do
-        assert Req.no_trump(table)
+        assert Strain.no_trump(table)
       end
     end
 
     test "returns false if a bid is not no trump" do
       check all(table <- Gen.table(bid: Gen.bid(ignore: [:no_trump]))) do
-        refute Req.no_trump(table)
+        refute Strain.no_trump(table)
       end
     end
   end
@@ -29,19 +30,19 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
   describe "spades" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table()) do
-        assert Req.spades().(table) == Req.spades(table)
+        assert Strain.spades().(table) == Strain.spades(table)
       end
     end
 
     test "returns true if a bid is spades trump" do
       check all(table <- Gen.table(bid: Gen.spade_bid())) do
-        assert Req.spades(table)
+        assert Strain.spades(table)
       end
     end
 
     test "returns false if a bid is not spades" do
       check all(table <- Gen.table(bid: Gen.bid(ignore: [:spades]))) do
-        refute Req.spades(table)
+        refute Strain.spades(table)
       end
     end
   end
@@ -49,19 +50,19 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
   describe "hearts" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table()) do
-        assert Req.hearts().(table) == Req.hearts(table)
+        assert Strain.hearts().(table) == Strain.hearts(table)
       end
     end
 
     test "returns true if a bid is hearts trump" do
       check all(table <- Gen.table(bid: Gen.heart_bid())) do
-        assert Req.hearts(table)
+        assert Strain.hearts(table)
       end
     end
 
     test "returns false if a bid is not hearts" do
       check all(table <- Gen.table(bid: Gen.bid(ignore: [:hearts]))) do
-        refute Req.hearts(table)
+        refute Strain.hearts(table)
       end
     end
   end
@@ -69,19 +70,19 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
   describe "diamonds" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table()) do
-        assert Req.diamonds().(table) == Req.diamonds(table)
+        assert Strain.diamonds().(table) == Strain.diamonds(table)
       end
     end
 
     test "returns true if a bid is diamonds trump" do
       check all(table <- Gen.table(bid: Gen.diamond_bid())) do
-        assert Req.diamonds(table)
+        assert Strain.diamonds(table)
       end
     end
 
     test "returns false if a bid is not diamonds" do
       check all(table <- Gen.table(bid: Gen.bid(ignore: [:diamonds]))) do
-        refute Req.diamonds(table)
+        refute Strain.diamonds(table)
       end
     end
   end
@@ -89,19 +90,19 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
   describe "clubs" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table()) do
-        assert Req.clubs().(table) == Req.clubs(table)
+        assert Strain.clubs().(table) == Strain.clubs(table)
       end
     end
 
     test "returns true if a bid is clubs trump" do
       check all(table <- Gen.table(bid: Gen.club_bid())) do
-        assert Req.clubs(table)
+        assert Strain.clubs(table)
       end
     end
 
     test "returns false if a bid is not clubs" do
       check all(table <- Gen.table(bid: Gen.bid(ignore: [:clubs]))) do
-        refute Req.clubs(table)
+        refute Strain.clubs(table)
       end
     end
   end
@@ -109,19 +110,19 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
   describe "major" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table()) do
-        assert Req.major().(table) == Req.major(table)
+        assert Strain.major().(table) == Strain.major(table)
       end
     end
 
     test "returns true if a bid is a major" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: Strain.majors()))) do
-        assert Req.major(table)
+      check all(table <- Gen.table(bid: Gen.contract_bid(only: Model.majors()))) do
+        assert Strain.major(table)
       end
     end
 
     test "returns false if a bid is not a major" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore: Strain.majors()))) do
-        refute Req.major(table)
+      check all(table <- Gen.table(bid: Gen.bid(ignore: Model.majors()))) do
+        refute Strain.major(table)
       end
     end
   end
@@ -129,19 +130,19 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
   describe "minor" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table()) do
-        assert Req.minor().(table) == Req.minor(table)
+        assert Strain.minor().(table) == Strain.minor(table)
       end
     end
 
     test "returns true if a bid is a minor" do
-      check all(table <- Gen.table(bid: Gen.contract_bid(only: Strain.minors()))) do
-        assert Req.minor(table)
+      check all(table <- Gen.table(bid: Gen.contract_bid(only: Model.minors()))) do
+        assert Strain.minor(table)
       end
     end
 
     test "returns false if a bid is not a minor" do
-      check all(table <- Gen.table(bid: Gen.bid(ignore: Strain.minors()))) do
-        refute Req.minor(table)
+      check all(table <- Gen.table(bid: Gen.bid(ignore: Model.minors()))) do
+        refute Strain.minor(table)
       end
     end
   end
@@ -149,7 +150,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
   describe "suit" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table()) do
-        assert Req.suit().(table) == Req.suit(table)
+        assert Strain.suit().(table) == Strain.suit(table)
       end
     end
 
@@ -158,7 +159,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               table <-
                 Gen.table(bid: Gen.suit_bid())
             ) do
-        assert Req.suit(table)
+        assert Strain.suit(table)
       end
     end
 
@@ -167,7 +168,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               table <-
                 Gen.table(bid: Gen.bid(only: [:double, :redouble, :pass, :no_trump]))
             ) do
-        refute Req.suit(table)
+        refute Strain.suit(table)
       end
     end
   end
@@ -175,7 +176,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
   describe "new_strain" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table(bid: Gen.bid())) do
-        assert Req.new_strain().(table) == Req.new_strain(table)
+        assert Strain.new_strain().(table) == Strain.new_strain(table)
       end
     end
 
@@ -185,7 +186,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               bids <- list_of(Gen.bid(ignore: [strain]))
             ) do
         table = %Table{previous_bids: bids, bid: bid}
-        assert Req.new_strain(table)
+        assert Strain.new_strain(table)
       end
     end
 
@@ -195,7 +196,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               bids <- list_of(Gen.bid())
             ) do
         table = %Table{previous_bids: bids ++ [{:five, strain, :N}], bid: bid}
-        refute Req.new_strain(table)
+        refute Strain.new_strain(table)
       end
     end
   end
@@ -204,21 +205,21 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     test "returns the same as 'eq'" do
       check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do
         bid_func = fn _ -> {:ok, bid} end
-        assert Req.eq(bid_func).(table) == Req.equal_to(bid_func).(table)
+        assert Strain.eq(bid_func).(table) == Strain.equal_to(bid_func).(table)
       end
     end
 
     test "with 1 arg returns the same as with 2 args" do
       check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do
         bid_func = fn _ -> {:ok, bid} end
-        assert Req.equal_to(bid_func).(table) == Req.equal_to(bid_func, table)
+        assert Strain.equal_to(bid_func).(table) == Strain.equal_to(bid_func, table)
       end
     end
 
     test "returns false if the current bid is an action bid" do
       check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.action_bid())) do
         bid_func = fn _ -> {:ok, bid} end
-        refute Req.equal_to(bid_func, table)
+        refute Strain.equal_to(bid_func, table)
       end
     end
 
@@ -228,7 +229,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               table <- Gen.table(bid: Gen.contract_bid(only: [strain]))
             ) do
         bid_func = fn _ -> {:ok, bid} end
-        assert Req.equal_to(bid_func, table)
+        assert Strain.equal_to(bid_func, table)
       end
     end
 
@@ -238,7 +239,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               table <- Gen.table(bid: Gen.contract_bid(ignore: [strain]))
             ) do
         bid_func = fn _ -> {:ok, bid} end
-        refute Req.equal_to(bid_func, table)
+        refute Strain.equal_to(bid_func, table)
       end
     end
   end
@@ -247,14 +248,14 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     test "returns the same as 'lt'" do
       check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do
         bid_func = fn _ -> {:ok, bid} end
-        assert Req.lt(bid_func).(table) == Req.lower_than(bid_func).(table)
+        assert Strain.lt(bid_func).(table) == Strain.lower_than(bid_func).(table)
       end
     end
 
     test "with 1 arg returns the same as with 2 args" do
       check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do
         bid_func = fn _ -> {:ok, bid} end
-        assert Req.lower_than(bid_func).(table) == Req.lower_than(bid_func, table)
+        assert Strain.lower_than(bid_func).(table) == Strain.lower_than(bid_func, table)
       end
     end
 
@@ -264,7 +265,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               table <- Gen.table()
             ) do
         bid_func = fn _ -> {:ok, bid} end
-        refute Req.lower_than(bid_func, table)
+        refute Strain.lower_than(bid_func, table)
       end
     end
 
@@ -274,7 +275,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               table <- Gen.table(bid: Gen.action_bid())
             ) do
         bid_func = fn _ -> {:ok, bid} end
-        refute Req.lower_than(bid_func, table)
+        refute Strain.lower_than(bid_func, table)
       end
     end
 
@@ -284,27 +285,27 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               table <- Gen.table(bid: Gen.no_trump_bid())
             ) do
         bid_func = fn _ -> {:ok, bid} end
-        refute Req.lower_than(bid_func, table)
+        refute Strain.lower_than(bid_func, table)
       end
     end
 
     test "returns true if a bid's strain is lower than a previous one" do
       check all(
               {_, strain, _} = higher_bid <- Gen.contract_bid(ignore: [:clubs]),
-              table <- Gen.table(bid: Gen.contract_bid(only: Strain.lower_strains(strain)))
+              table <- Gen.table(bid: Gen.contract_bid(only: Model.lower_strains(strain)))
             ) do
         bid_func = fn _ -> {:ok, higher_bid} end
-        assert Req.lower_than(bid_func, table)
+        assert Strain.lower_than(bid_func, table)
       end
     end
 
     test "returns false if a bid's strain is higher than a previous one" do
       check all(
               {_, strain, _} = lower_bid <- Gen.suit_bid(),
-              table <- Gen.table(bid: Gen.contract_bid(only: Strain.higher_strains(strain)))
+              table <- Gen.table(bid: Gen.contract_bid(only: Model.higher_strains(strain)))
             ) do
         bid_func = fn _ -> {:ok, lower_bid} end
-        refute Req.lower_than(bid_func, table)
+        refute Strain.lower_than(bid_func, table)
       end
     end
 
@@ -314,7 +315,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               table <- Gen.table(bid: Gen.contract_bid(only: [strain]))
             ) do
         bid_func = fn _ -> {:ok, lower_bid} end
-        refute Req.lower_than(bid_func, table)
+        refute Strain.lower_than(bid_func, table)
       end
     end
   end
@@ -323,14 +324,14 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
     test "returns the same as 'ht'" do
       check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do
         bid_func = fn _ -> {:ok, bid} end
-        assert Req.ht(bid_func).(table) == Req.higher_than(bid_func).(table)
+        assert Strain.ht(bid_func).(table) == Strain.higher_than(bid_func).(table)
       end
     end
 
     test "with 1 arg returns the same as with 2 args" do
       check all(bid <- Gen.bid(), table <- Gen.table(bid: Gen.bid())) do
         bid_func = fn _ -> {:ok, bid} end
-        assert Req.higher_than(bid_func).(table) == Req.higher_than(bid_func, table)
+        assert Strain.higher_than(bid_func).(table) == Strain.higher_than(bid_func, table)
       end
     end
 
@@ -340,7 +341,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               table <- Gen.table()
             ) do
         bid_func = fn _ -> {:ok, bid} end
-        refute Req.higher_than(bid_func, table)
+        refute Strain.higher_than(bid_func, table)
       end
     end
 
@@ -350,7 +351,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               table <- Gen.table(bid: Gen.action_bid())
             ) do
         bid_func = fn _ -> {:ok, bid} end
-        refute Req.higher_than(bid_func, table)
+        refute Strain.higher_than(bid_func, table)
       end
     end
 
@@ -360,27 +361,27 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               table <- Gen.table(bid: Gen.club_bid())
             ) do
         bid_func = fn _ -> {:ok, bid} end
-        refute Req.higher_than(bid_func, table)
+        refute Strain.higher_than(bid_func, table)
       end
     end
 
     test "returns true if a bid's strain is higher than a previous one" do
       check all(
               {_, strain, _} = lower_bid <- Gen.suit_bid(),
-              table <- Gen.table(bid: Gen.contract_bid(only: Strain.higher_strains(strain)))
+              table <- Gen.table(bid: Gen.contract_bid(only: Model.higher_strains(strain)))
             ) do
         bid_func = fn _ -> {:ok, lower_bid} end
-        assert Req.higher_than(bid_func, table)
+        assert Strain.higher_than(bid_func, table)
       end
     end
 
     test "returns false if a bid's strain is lower than a previous one" do
       check all(
               {_, strain, _} = higher_bid <- Gen.contract_bid(ignore: [:clubs]),
-              table <- Gen.table(bid: Gen.contract_bid(only: Strain.lower_strains(strain)))
+              table <- Gen.table(bid: Gen.contract_bid(only: Model.lower_strains(strain)))
             ) do
         bid_func = fn _ -> {:ok, higher_bid} end
-        refute Req.higher_than(bid_func, table)
+        refute Strain.higher_than(bid_func, table)
       end
     end
 
@@ -390,7 +391,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.StrainTest do
               table <- Gen.table(bid: Gen.contract_bid(only: [strain]))
             ) do
         bid_func = fn _ -> {:ok, higher_bid} end
-        refute Req.higher_than(bid_func, table)
+        refute Strain.higher_than(bid_func, table)
       end
     end
   end

@@ -6,6 +6,26 @@ defmodule Kibitzing.Engine.Convention.Requirement.TraitTest do
   alias Kibitzing.Engine.Models.{Level, Strain, Table}
   alias Kibitzing.Engine.Convention.Requirement.Trait
 
+  describe "first_bid" do
+    test "with no args returns the same as with args" do
+      check all(table <- Gen.table()) do
+        assert Trait.first_bid().(table) == Trait.first_bid(table)
+      end
+    end
+
+    test "returns :okay if it's a players first bid" do
+      check all(table <- Gen.table(prev: list_of(Gen.bid(), max_length: 3))) do
+        assert Trait.first_bid(table) == :ok
+      end
+    end
+
+    test "returns :fail if player has already bid" do
+      check all(table <- Gen.table(prev: list_of(Gen.bid(), min_length: 4))) do
+        assert Trait.first_bid(table) == :fail
+      end
+    end
+  end
+
   describe "opening_bid" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table()) do

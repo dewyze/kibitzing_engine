@@ -106,26 +106,6 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
     end
   end
 
-  describe "first_bid" do
-    test "with no args returns the same as with args" do
-      check all(table <- Gen.table()) do
-        assert Bid.first_bid().(table) == Bid.first_bid(table)
-      end
-    end
-
-    test "returns :okay if it's a players first bid" do
-      check all(table <- Gen.table(prev: list_of(Gen.bid(), max_length: 3))) do
-        assert Bid.first_bid(table) == :ok
-      end
-    end
-
-    test "returns :fail if player has already bid" do
-      check all(table <- Gen.table(prev: list_of(Gen.bid(), min_length: 4))) do
-        assert Bid.first_bid(table) == :fail
-      end
-    end
-  end
-
   describe "from_prev_partner" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table(prev: list_of(Gen.contract_bid(), min_length: 2))) do

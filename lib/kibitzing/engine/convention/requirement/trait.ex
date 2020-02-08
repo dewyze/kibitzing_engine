@@ -2,6 +2,10 @@ defmodule Kibitzing.Engine.Convention.Requirement.Trait do
   alias Kibitzing.Engine.Models.{Bid, Level, Strain, Table}
   alias Kibitzing.Engine.Convention.Result
 
+  def first_bid(), do: &first_bid/1
+  def first_bid(%Table{previous_bids: prev}) when length(prev) < 4, do: :ok
+  def first_bid(%Table{}), do: :fail
+
   def opening_bid, do: &opening_bid/1
 
   def opening_bid(%Table{bid: {:pass, _}, previous_bids: previous_bids}) do

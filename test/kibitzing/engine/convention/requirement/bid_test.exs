@@ -6,6 +6,37 @@ defmodule Kibitzing.Engine.Convention.Requirement.BidTest do
   alias Kibitzing.Engine.Models.Table
   alias Support.Generators, as: Gen
 
+  describe "exact_bid" do
+    test "with no args returns the same as with args" do
+      check all(
+              {level, strain, _} <- Gen.contract_bid(),
+              table <- Gen.table()
+            ) do
+        assert Bid.exact({level, strain}).(table) == Bid.exact({level, strain}, table)
+      end
+    end
+
+    test "returns :ok for a match" do
+      check all(
+              {level, strain, _} <- Gen.contract_bid(),
+              table <- Gen.table(bid: Gen.contract_bid(only: [level, strain]))
+            ) do
+        assert Bid.exact({level, strain}, table) == :ok
+      end
+    end
+
+    test "returns :fail for a non match" do
+      check all(
+              {level, strain, _} <- Gen.contract_bid(),
+              {bid_level, bid_strain, _} = bid <- Gen.contract_bid(),
+              level != bid_level && strain != bid_strain,
+              table <- Gen.table(bid: constant(bid))
+            ) do
+        assert Bid.exact({level, strain}, table) == :fail
+      end
+    end
+  end
+
   describe "pass" do
     test "with no args returns the same as with args" do
       check all(table <- Gen.table()) do

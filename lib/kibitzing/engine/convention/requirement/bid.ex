@@ -2,6 +2,10 @@ defmodule Kibitzing.Engine.Convention.Requirement.Bid do
   alias Kibitzing.Engine.Models.{Bid, Table}
   alias Kibitzing.Engine.Convention.Result
 
+  def exact(exact_bid), do: fn table -> exact(exact_bid, table) end
+  def exact({level, strain}, %Table{bid: {level, strain, _}}), do: :ok
+  def exact(_, %Table{}), do: :fail
+
   def pass(), do: &pass/1
   def pass(%Table{bid: bid}), do: Result.opt(Bid.pass?(bid))
 

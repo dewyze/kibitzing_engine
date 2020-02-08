@@ -11,6 +11,10 @@ defmodule Kibitzing.Engine.Convention.Requirement.Bid do
   def redouble(), do: &redouble/1
   def redouble(%Table{bid: bid}), do: Result.opt(Bid.redouble?(bid))
 
+  def first_bid(), do: &first_bid/1
+  def first_bid(%Table{previous_bids: prev}) when length(prev) < 4, do: :ok
+  def first_bid(%Table{}), do: :fail
+
   def from_prev_partner(), do: &from_prev_partner/1
 
   def from_prev_partner(%Table{previous_bids: bids}) when length(bids) >= 2 do

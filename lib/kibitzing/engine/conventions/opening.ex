@@ -4,8 +4,8 @@ defmodule Kibitzing.Engine.Conventions.Opening do
 
   def two_over_one do
     Conv.new(:two_over_one, "2/1")
-    |> Conv.bid([Trait.opening_bid(), Level.one(), Strain.suit()], label: :opener)
+    |> Conv.bid([Bid.first_bid(), Trait.opening_bid(), Level.one(), Strain.suit()], label: :opener)
     |> Conv.pass()
-    |> Conv.bid([Level.two(), Strain.lt(Bid.from_prev_partner())])
+    |> Conv.bid([Bid.first_bid(), Level.two(), Strain.lt(Bid.from_prev_partner())])
   end
 end

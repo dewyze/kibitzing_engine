@@ -15,11 +15,18 @@ defmodule Kibitzing.Engine.Conventions.OpeningTest do
       assert match?(%Table{conventions: [:two_over_one]}, Convention.process(conv, table))
     end
 
-    test "works with passes" do
+    test "works with a pass" do
       conv = Opening.two_over_one()
       bids = [{:pass, :E}, {:one, :hearts, :S}, {:pass, :W}, {:two, :clubs, :N}]
       table = %Table{next_bids: bids}
       assert match?(%Table{conventions: [:two_over_one]}, Convention.process(conv, table))
+    end
+
+    test "does not work if one partner has passed" do
+      conv = Opening.two_over_one()
+      bids = [{:pass, :N}, {:pass, :E}, {:one, :hearts, :S}, {:pass, :W}, {:two, :clubs, :N}]
+      table = %Table{next_bids: bids}
+      assert match?(%Table{conventions: []}, Convention.process(conv, table))
     end
 
     test "does not work with anything" do

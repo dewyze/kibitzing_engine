@@ -16,13 +16,44 @@ defmodule Kibitzing.Engine.Convention.Node do
     end
   end
 
-  def process(table, %__MODULE__{method: :bid, requirements: reqs, options: options}) do
-    if Enum.all?(reqs, fn req ->
-         req.(table)
-       end) do
-      advance_table(table, options)
-    else
-      {:fail, table}
+  def process(orig_table, %__MODULE__{method: :bid, requirements: reqs, options: options}) do
+    bids = [orig_table.bid | orig_table.next_bids]
+
+    # TODO: REFACTOR
+    {status, table} =
+      Enum.reduce_while(bids, {:fail, orig_table}, fn _, {_, t} ->
+        meets_req =
+          Enum.reduce_while(reqs, :fail, fn req, _ ->
+            case(req.(t)) do
+              :fail ->
+                {:halt, :fail}
+
+              :next ->
+                {:halt, :next}
+
+              :ok ->
+                {:cont, :ok}
+            end
+          end)
+
+        case meets_req do
+          :ok ->
+            {:halt, {:ok, t}}
+
+          :next ->
+            {:cont, {:fail, advance_table(t)}}
+
+          :fail ->
+            {:halt, {:fail, orig_table}}
+        end
+      end)
+
+    case status do
+      :ok ->
+        {:ok, advance_table(table, options)}
+
+      _ ->
+        {:fail, orig_table}
     end
   end
 
@@ -34,20 +65,22 @@ defmodule Kibitzing.Engine.Convention.Node do
   end
 
   defp advance_table(
-         %Table{bid: bid, previous_bids: prev, next_bids: next, labeled_bids: labeled},
-         options
+         table = %Table{bid: bid, previous_bids: prev, next_bids: next, labeled_bids: labeled},
+         options \\ Keyword.new()
        ) do
     labeled =
       if Keyword.has_key?(options, :label) do
         Keyword.put(labeled, Keyword.fetch!(options, :label), bid)
+      else
+        labeled
       end
 
     case next do
       [] ->
-        {:ok, %Table{previous_bids: [bid | prev], bid: nil, next_bids: [], labeled_bids: labeled}}
+        %{table | previous_bids: [bid | prev], bid: nil, next_bids: [], labeled_bids: labeled}
 
       [h | t] ->
-        {:ok, %Table{previous_bids: [bid | prev], bid: h, next_bids: t, labeled_bids: labeled}}
+        %{table | previous_bids: [bid | prev], bid: h, next_bids: t, labeled_bids: labeled}
     end
   end
 end

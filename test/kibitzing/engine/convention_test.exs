@@ -3,6 +3,7 @@ defmodule Kibitzing.Engine.ConventionTest do
   use ExUnitProperties
   # doctest Kibitzing.Engine.Convention
   alias Kibitzing.Engine.{Convention, Convention.Node, Convention.Requirement.Bid}
+  alias Kibitzing.Engine.Models.Table
   alias Support.Generators, as: Gen
 
   describe "new" do
@@ -82,18 +83,20 @@ defmodule Kibitzing.Engine.ConventionTest do
       end
     end
 
-    # test "adds the convention if convention matches middle bids" do
-    #   check all(
-    #           bid <- one_of([Gen.contract_bid(), Gen.double(), Gen.redouble()]),
-    #           pass <- Gen.pass(),
-    #           table <- Gen.table()
-    #         ) do
-    #     table = %{table | next_bids: [bid | [pass | table.next_bids]]}
-    #
-    #     convention = Convention.pass(Convention.new(:conv, "conv"))
-    #     table = Convention.process(convention, table)
-    #     assert table.conventions == [:conv]
-    #   end
-    # end
+    test "adds the convention if convention matches middle bids" do
+      # check all(
+      #         bid <- one_of([Gen.contract_bid(), Gen.double(), Gen.redouble()]),
+      #         pass <- Gen.pass(),
+      #         table <- Gen.table()
+      #       ) do
+      bid = {:one, :clubs, :S}
+      pass = {:pass, :W}
+      table = %Table{next_bids: [bid, pass]}
+
+      convention = Convention.pass(Convention.new(:conv, "conv"))
+      table = Convention.process(convention, table)
+      assert table.conventions == [:conv]
+      # end
+    end
   end
 end

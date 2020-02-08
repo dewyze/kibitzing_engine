@@ -25,12 +25,14 @@ defmodule Kibitzing.Engine.Convention do
     end
   end
 
-  defp process_nodes([node | []], table) do
+  defp process_node(node, table) do
     Node.process(table, node)
   end
 
+  defp process_nodes([node | []], table), do: process_node(node, table)
+
   defp process_nodes([node | nodes], orig_table) do
-    with {:ok, table} <- Node.process(orig_table, node) do
+    with {:ok, table} <- process_node(node, orig_table) do
       process_nodes(nodes, table)
     else
       _ ->

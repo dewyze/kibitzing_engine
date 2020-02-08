@@ -14,8 +14,13 @@ defmodule Kibitzing.Engine.Convention.Requirement.TraitTest do
     end
 
     test "returns :ok if it is the first bid" do
-      check all(table <- Gen.table()) do
-        table = %{table | previous_bids: []}
+      check all(
+              table <-
+                Gen.table(
+                  bid: Gen.contract_bid(),
+                  prev: constant([])
+                )
+            ) do
         assert Trait.opening_bid(table) == :ok
       end
     end
@@ -29,6 +34,18 @@ defmodule Kibitzing.Engine.Convention.Requirement.TraitTest do
                 )
             ) do
         assert Trait.opening_bid(table) == :ok
+      end
+    end
+
+    test "returns :next if the current bid is a pass and there are no previous bids" do
+      check all(
+              table <-
+                Gen.table(
+                  bid: Gen.pass(),
+                  prev: list_of(Gen.pass())
+                )
+            ) do
+        assert Trait.opening_bid(table) == :next
       end
     end
 

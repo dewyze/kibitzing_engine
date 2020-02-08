@@ -16,6 +16,21 @@ defmodule Kibitzing.Engine.Convention.Result do
   def optional(false), do: :next
 
   @doc ~S"""
+  Converts a boolean to :next or :fail
+
+  ## Examples
+
+      iex> Kibitzing.Engine.Convention.Result.skip(true)
+      :next
+
+      iex> Kibitzing.Engine.Convention.Result.skip(false)
+      :fail
+
+  """
+  def skip(true), do: :next
+  def skip(false), do: :fail
+
+  @doc ~S"""
   Converts a boolean to :ok or :fail
 
   ## Examples

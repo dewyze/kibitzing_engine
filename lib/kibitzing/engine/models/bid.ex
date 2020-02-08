@@ -1,6 +1,9 @@
 defmodule Kibitzing.Engine.Models.Bid do
   alias Kibitzing.Engine.Models.{Level, Strain}
 
+  def contract_bid?({_, _, _}), do: true
+  def contract_bid?(_), do: false
+
   def pass?({:pass, _}), do: true
   def pass?(_), do: false
 

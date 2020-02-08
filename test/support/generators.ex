@@ -2,7 +2,8 @@ defmodule Support.Generators do
   use ExUnitProperties
 
   alias Kibitzing.Engine.Models.{Level, Strain, Table}
-  alias Kibitzing.Engine.Convention.Requirement.{UnreachableError}
+  alias Kibitzing.Engine.Convention.Requirement.{Node, UnreachableError}
+  alias Kibitzing.Engine.Convention.Node
   alias Support.Bids
 
   @spec n_bid() :: no_return
@@ -193,6 +194,26 @@ defmodule Support.Generators do
 
     gen all(bid <- bid_gen, prev <- prev_gen, next <- next_gen) do
       %Table{bid: bid, previous_bids: prev, next_bids: next}
+    end
+  end
+
+  @spec req() :: no_return
+  @spec req(keyword()) :: no_return
+  def req(options \\ Keyword.new()) do
+    values = Keyword.get(options, :only, [:ok, :next, :fail])
+
+    gen all(val <- member_of(values)) do
+      fn _table -> val end
+    end
+  end
+
+  @spec node() :: no_return
+  @spec node(keyword()) :: no_return
+  def node(options \\ Keyword.new()) do
+    values = Keyword.get(options, :only, [:ok, :next, :fail])
+
+    gen all(req <- req(only: values)) do
+      %Node{requirements: [req], method: :bid}
     end
   end
 end

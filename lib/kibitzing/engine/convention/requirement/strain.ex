@@ -3,7 +3,7 @@ defmodule Kibitzing.Engine.Convention.Requirement.Strain do
   alias Kibitzing.Engine.Convention.Result
 
   def no_trump, do: &no_trump/1
-  def no_trump(table), do: Result.opt(match?(%Table{bid: {_, :no_trump, _}}, table))
+  def no_trump(%Table{bid: bid}), do: Result.opt(match?({_, :no_trump, _}, bid))
 
   def spades, do: &spades/1
   def spades(%Table{bid: bid}), do: Result.opt(match?({_, :spades, _}, bid))

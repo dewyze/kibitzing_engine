@@ -128,6 +128,13 @@ defmodule Support.Generators do
     end
   end
 
+  @spec non_pass() :: no_return
+  def non_pass() do
+    gen all(bid <- one_of([contract_bid(), action_bid(ignore: [:pass])])) do
+      bid
+    end
+  end
+
   @spec higher_bid(any()) :: no_return
   def higher_bid({level, strain, _}) do
     seats = [:N, :E, :S, :W]
